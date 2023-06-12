@@ -1,15 +1,16 @@
 import random
 
+
 class Duelist:
-    def __init__(self, name, machine_file, max_life_points):
+    def __init__(self, name, machine_file, maxLife):
         self.name = name
         self.state = None
         self.transitions = {}
         self.productions = {}
         self.actions = {}
         self.initial = None
-        self.max_life_points = max_life_points
-        self.life_points = max_life_points
+        self.max_life_points = maxLife
+        self.life_points = maxLife
         self.load_machine(machine_file)
 
     def load_machine(self, machine_file):
@@ -165,7 +166,6 @@ class Duelist:
             print()
 
 
-
 print("Bem-vindo ao duelo!")
 print("Insira o nome dos dois duelistas:")
 
@@ -196,8 +196,8 @@ while d1.life_points > 0 and d2.life_points > 0:
     turn += 1
 
 if d1.life_points <= 0:
-    print("Azarael foi derrotado!")
+    print(f"{d1.name} foi derrotado!")
 elif d2.life_points <= 0:
-    print("Nehrim foi derrotado!")
+    print(f"{d2.name} foi derrotado!")
 
 print("Fim do jogo.")
