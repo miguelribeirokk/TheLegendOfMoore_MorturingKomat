@@ -1,4 +1,12 @@
+import tkinter as tk
 import random
+from enum import Enum
+
+
+class Action(Enum):
+    ATTACK = "Attack"
+    DEFENSE = "Defense"
+    HEAL = "Heal"
 
 
 class Duelist:
@@ -29,7 +37,7 @@ class Duelist:
             current_state = line[0]
             next_state = line[2]
             input_ = line[4]
-            production = random.choice(["Ataque", "Defesa", "Curar"])  # Gerar aleatoriamente a produção
+            production = random.choice(list(Action))
             self.add_transition(current_state, next_state, input_)
             self.add_production(current_state, production)
 
@@ -42,163 +50,204 @@ class Duelist:
         self.productions[state] = production
 
     def execute_machine(self, next_state, target):
-        print(f"Próximo estado: {next_state}")
-        print(f"Vida de {self.name}: {self.life_points}")
         production = self.productions[next_state]
-        print(f"Produção: {production}")
 
-        if production == "Ataque":
+        if production == Action.ATTACK:
             damage = random.randint(0, 10)
-            self.actions[self.name] = [damage, "Ataque", target.name]
-        elif production == "Defesa":
+            self.actions[self.name] = [damage, Action.ATTACK, target.name]
+        elif production == Action.DEFENSE:
             defense = random.randint(0, 10)
-            self.actions[self.name] = [defense, "Defesa", self.name]
-        elif production == "Curar":
+            self.actions[self.name] = [defense, Action.DEFENSE, self.name]
+        elif production == Action.HEAL:
             heal = random.randint(0, 10)
-            self.actions[self.name] = [heal, "Curar", self.name]
+            self.actions[self.name] = [heal, Action.HEAL, self.name]
         self.state = next_state
 
-    def play_turn(self, opponent):
+    def play_turn(self, opponent, choice):
         self.opponent = opponent
-        print(f"Turno de {self.name}:")
-        choice = input("Qual leitura deseja? ")
+
         if self.state is None:
             self.state = self.initial
         if opponent.state is None:
             opponent.state = opponent.initial
-        print(f"Estado atual do duelista de {self.name}: {self.state}")
-        print(f"Estado atual do duelista de {opponent.name}: {opponent.state}")
-        print(f"Leitura: {choice}")
+
         self.execute_machine(self.transitions[self.state][choice], self.opponent)
         opponent.execute_machine(opponent.transitions[opponent.state][choice], self)
 
-        # Executar as ações dos dois duelistas simultaneamente
-        print(f"Ações do duelista de {self.name}: {self.actions[self.name]}")
-        print(f"Ações do duelista de {opponent.name}: {opponent.actions[opponent.name]}")
         self.resolve_actions()
 
-        # Atualizar pontos de vida dos duelistas
-        print(f"Vida restante do duelista de {self.name}: {self.life_points}")
-        print(f"Vida restante do duelista de {opponent.name}: {opponent.life_points}")
         self.opponent = None
 
     def resolve_actions(self):
         if self.name in self.actions and self.opponent.name in self.opponent.actions:
-            print("Resolvendo ações...")
             action_self = self.actions[self.name]
-
             action_opponent = self.opponent.actions[self.opponent.name]
-            print(action_self[1])
-            print(action_opponent[1])
-            # Ataque
-            if action_self[1] == "Ataque" and action_opponent[1] == "Ataque":
-                print("Ambos atacam")
+
+            if action_self[1] == Action.ATTACK and action_opponent[1] == Action.ATTACK:
                 damage_self = action_self[0]
                 damage_opponent = action_opponent[0]
                 self.life_points -= damage_opponent
                 self.opponent.life_points -= damage_self
-
-
-
-            # Ambos defendem
-            elif action_self[1] == "Defesa" and action_opponent[1] == "Defesa":
-                print("Ambos defendem")
-                pass  # Nada acontece
-
-            # Apenas um oponente ataca e o outro defende
+            elif action_self[1] == Action.DEFENSE and action_opponent[1] == Action.DEFENSE:
+                pass  # No action taken
             else:
-                if action_self[1] == "Ataque" and action_opponent[1] == "Defesa":
-                    print("Apenas um ataca e o outro defende")
+                if action_self[1] == Action.ATTACK and action_opponent[1] == Action.DEFENSE:
                     damage_self = action_self[0]
                     defense_opponent = action_opponent[0]
                     damage_opponent = max(0, damage_self - defense_opponent)
                     self.opponent.life_points -= damage_opponent
-
-                elif action_self[1] == "Defesa" and action_opponent[1] == "Ataque":
-                    print("Apenas um ataca e o outro defende, mas ao contrário")
+                elif action_self[1] == Action.DEFENSE and action_opponent[1] == Action.ATTACK:
                     defense_self = action_self[0]
                     damage_opponent = action_opponent[0]
                     damage_self = max(0, damage_opponent - defense_self)
                     self.life_points -= damage_self
 
-            # Ambos se curam
-            if action_self[1] == "Curar" and action_opponent[1] == "Curar":
-                print("Ambos se curam")
+            if action_self[1] == Action.HEAL and action_opponent[1] == Action.HEAL:
                 heal_self = action_self[0]
                 heal_opponent = action_opponent[0]
                 self.life_points += heal_self
                 self.opponent.life_points += heal_opponent
-
-            # Apenas um se cura
             else:
-                if action_self[1] == "Curar" and action_opponent[1] != "Curar":
-                    # primeiro verifica se o oponente atacou se sim ataca
-                    print("Apenas um se cura")
-                    if action_opponent[1] == "Ataque":
+                if action_self[1] == Action.HEAL and action_opponent[1] != Action.HEAL:
+                    if action_opponent[1] == Action.ATTACK:
                         damage_self = action_opponent[0]
                         self.life_points -= damage_self
                     heal_self = action_self[0]
                     self.life_points += heal_self
-
-                elif action_self[1] != "Curar" and action_opponent[1] == "Curar":
-                    # primeiro verifica se o oponente atacou se sim ataca
-                    print("Apenas um se cura, mas ao contrário")
-                    if action_self[1] == "Ataque":
+                elif action_self[1] != Action.HEAL and action_opponent[1] == Action.HEAL:
+                    if action_self[1] == Action.ATTACK:
                         damage_opponent = action_self[0]
                         self.opponent.life_points -= damage_opponent
                     heal_opponent = action_opponent[0]
                     self.opponent.life_points += heal_opponent
 
-            # Garantir que os pontos de vida não excedam o máximo
             self.life_points = min(self.life_points, self.max_life_points)
             self.opponent.life_points = min(self.opponent.life_points, self.opponent.max_life_points)
 
-            # Limpar as ações
             self.actions = {}
             self.opponent.actions = {}
 
     def show_transitions(self):
-        print(f"Transitions for {self.name}:")
+        transitions_window = tk.Toplevel()
+        transitions_window.title(f"Transitions for {self.name}")
+
         for current_state, transitions in self.transitions.items():
-            print(f"State: {current_state}")
+            state_label = tk.Label(transitions_window, text=f"State: {current_state}", font=("Arial", 12, "bold"))
+            state_label.pack()
+
             for input_, next_state in transitions.items():
                 production = self.productions[next_state]
-                print(f"Input: {input_} -> Next State: {next_state}, Production: {production}")
-            print()
+                transition_label = tk.Label(
+                    transitions_window,
+                    text=f"Input: {input_} -> Next State: {next_state}, Production: {production.value}",
+                    font=("Arial", 10)
+                )
+                transition_label.pack()
 
 
-print("Bem-vindo ao duelo!")
-print("Insira o nome dos dois duelistas:")
+class GameWindow:
+    def __init__(self, root, duelist1, duelist2):
+        self.root = root
+        self.duelist1 = duelist1
+        self.duelist2 = duelist2
 
-duelist1 = input("Duelista 1: ")
-duelist2 = input("Duelista 2: ")
+        self.turn = 1
+        self.create_widgets()
+        self.update_stats()
 
-print("Insira a vida máxima dos dois duelistas:")
-max_life_points = int(input())
+    def create_widgets(self):
+        self.title_label = tk.Label(self.root, text="Medieval Duel", font=("Arial", 20, "bold"))
+        self.title_label.pack(pady=10)
 
-d1 = Duelist(duelist1, "../files/1.txt", max_life_points)
-d2 = Duelist(duelist2, "../files/2.txt", max_life_points)
+        self.duelist1_frame = tk.Frame(self.root, bd=2, relief=tk.RAISED)
+        self.duelist1_name_label = tk.Label(self.duelist1_frame, text=f"Name: {self.duelist1.name}")
+        self.duelist1_name_label.pack()
+        self.duelist1_life_label = tk.Label(
+            self.duelist1_frame,
+            text=f"Life Points: {self.duelist1.life_points}/{self.duelist1.max_life_points}"
+        )
+        self.duelist1_life_label.pack()
+        self.duelist1_state_label = tk.Label(self.duelist1_frame, text=f"State: {self.duelist1.state}")
+        self.duelist1_state_label.pack()
+        self.duelist1_frame.pack(side=tk.LEFT, padx=20)
 
-print("Máquina de:", d1.name)
-d1.show_transitions()
-print("Máquina de:", d2.name)
-d2.show_transitions()
+        self.duelist2_frame = tk.Frame(self.root, bd=2, relief=tk.RAISED)
+        self.duelist2_name_label = tk.Label(self.duelist2_frame, text=f"Name: {self.duelist2.name}")
+        self.duelist2_name_label.pack()
+        self.duelist2_life_label = tk.Label(
+            self.duelist2_frame,
+            text=f"Life Points: {self.duelist2.life_points}/{self.duelist2.max_life_points}"
+        )
+        self.duelist2_life_label.pack()
+        self.duelist2_state_label = tk.Label(self.duelist2_frame, text=f"State: {self.duelist2.state}")
+        self.duelist2_state_label.pack()
+        self.duelist2_frame.pack(side=tk.RIGHT, padx=20)
 
-turn = 1
-while d1.life_points > 0 and d2.life_points > 0:
-    if turn % 2 == 1:
-        d1.play_turn(d2)
-        print()
-    else:
-        d2.play_turn(d1)
-        print()
-    print()
+        self.turn_label = tk.Label(self.root, text=f"Turn: {self.turn}")
+        self.turn_label.pack(pady=20)
 
-    turn += 1
+        self.choice_label = tk.Label(self.root, text="Choose a reading:", font=("Arial", 12, "bold"))
+        self.choice_label.pack()
 
-if d1.life_points <= 0:
-    print(f"{d1.name} foi derrotado!")
-elif d2.life_points <= 0:
-    print(f"{d2.name} foi derrotado!")
+        self.choice_entry = tk.Entry(self.root, font=("Arial", 12))
+        self.choice_entry.pack()
 
-print("Fim do jogo.")
+        self.play_button = tk.Button(
+            self.root,
+            text="Play",
+            font=("Arial", 12, "bold"),
+            bg="green",
+            fg="white",
+            command=self.play_turn
+        )
+        self.play_button.pack(pady=10)
+
+        self.result_label = tk.Label(self.root, text="", font=("Arial", 14, "bold"))
+        self.result_label.pack(pady=20)
+
+    def update_stats(self):
+        self.duelist1_name_label.config(text=f"Name: {self.duelist1.name}")
+        self.duelist1_life_label.config(
+            text=f"Life Points: {self.duelist1.life_points}/{self.duelist1.max_life_points}"
+        )
+        self.duelist1_state_label.config(text=f"State: {self.duelist1.state}")
+
+        self.duelist2_name_label.config(text=f"Name: {self.duelist2.name}")
+        self.duelist2_life_label.config(
+            text=f"Life Points: {self.duelist2.life_points}/{self.duelist2.max_life_points}"
+        )
+        self.duelist2_state_label.config(text=f"State: {self.duelist2.state}")
+
+        self.turn_label.config(text=f"Turn: {self.turn}")
+
+    def play_turn(self):
+        choice = self.choice_entry.get()
+        self.duelist1.play_turn(self.duelist2, choice)
+        self.update_stats()
+
+        if self.duelist1.life_points <= 0:
+            self.result_label.config(text=f"{self.duelist1.name} has been defeated!", fg="red")
+            self.play_button.config(state=tk.DISABLED)
+        elif self.duelist2.life_points <= 0:
+            self.result_label.config(text=f"{self.duelist2.name} has been defeated!", fg="red")
+            self.play_button.config(state=tk.DISABLED)
+
+        self.turn += 1
+        self.turn_label.config(text=f"Turn: {self.turn}")
+        self.choice_entry.delete(0, tk.END)
+
+
+def main():
+    root = tk.Tk()
+    root.title("Medieval Duel")
+
+    duelist1 = Duelist("Player", "../files/1.txt", 100)
+    duelist2 = Duelist("AI", "../files/2.txt", 100)
+
+    game_window = GameWindow(root, duelist1, duelist2)
+
+    root.mainloop()
+
+
+if __name__ == "__main__":
+    main()
