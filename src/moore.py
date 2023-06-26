@@ -139,10 +139,61 @@ class Duelist:
                 production = self.productions[next_state]
                 transition_label = tk.Label(
                     transitions_window,
-                    text=f"Input: {input_} -> Next State: {next_state}, Production: {production.value}",
+                    text=f"Input: {input_} --- Next State: {next_state} --- Production: {production.value}",
                     font=("Arial", 10)
                 )
                 transition_label.pack()
+
+
+class StartWindow:
+    def __init__(self, root):
+        self.root = root
+        self.create_widgets()
+
+    def create_widgets(self):
+        self.title_label = tk.Label(self.root, text="Medieval Duel Setup", font=("Arial", 20, "bold"))
+        self.title_label.pack(pady=10)
+
+        self.duelist1_name_label = tk.Label(self.root, text="Duelist 1 Name:")
+        self.duelist1_name_label.pack()
+        self.duelist1_name_entry = tk.Entry(self.root, font=("Arial", 12))
+        self.duelist1_name_entry.pack()
+
+        self.duelist2_name_label = tk.Label(self.root, text="Duelist 2 Name:")
+        self.duelist2_name_label.pack()
+        self.duelist2_name_entry = tk.Entry(self.root, font=("Arial", 12))
+        self.duelist2_name_entry.pack()
+
+        self.life_label = tk.Label(self.root, text="Life Points:")
+        self.life_label.pack()
+        self.life_entry = tk.Entry(self.root, font=("Arial", 12))
+        self.life_entry.pack()
+
+        self.start_button = tk.Button(
+            self.root,
+            text="Start Duel",
+            font=("Arial", 12, "bold"),
+            bg="green",
+            fg="white",
+            command=self.start_duel
+        )
+        self.start_button.pack(pady=20)
+
+    def start_duel(self):
+        duelist1_name = self.duelist1_name_entry.get()
+        duelist2_name = self.duelist2_name_entry.get()
+        life_points = int(self.life_entry.get())
+
+        self.root.destroy()
+
+        duel_root = tk.Tk()
+        duel_root.title("Medieval Duel")
+
+        duelist1 = Duelist(duelist1_name, "../files/1.txt", life_points)
+        duelist2 = Duelist(duelist2_name, "../files/2.txt", life_points)
+
+        game_window = GameWindow(duel_root, duelist1, duelist2)
+        duel_root.mainloop()
 
 
 class GameWindow:
@@ -152,12 +203,21 @@ class GameWindow:
         self.duelist2 = duelist2
 
         self.turn = 1
+        self.current_player = self.duelist1 if self.turn % 2 != 0 else self.duelist2  # Definir jogador atual
         self.create_widgets()
         self.update_stats()
+
+    def show_machines(self):
+        self.duelist1.show_transitions()
+        self.duelist2.show_transitions()
 
     def create_widgets(self):
         self.title_label = tk.Label(self.root, text="Medieval Duel", font=("Arial", 20, "bold"))
         self.title_label.pack(pady=10)
+
+        self.current_player_label = tk.Label(self.root, text=f"Current Player: {self.current_player.name}",
+                                             font=("Arial", 12, "bold"))
+        self.current_player_label.pack(pady=5)
 
         self.duelist1_frame = tk.Frame(self.root, bd=2, relief=tk.RAISED)
         self.duelist1_name_label = tk.Label(self.duelist1_frame, text=f"Name: {self.duelist1.name}")
@@ -205,6 +265,16 @@ class GameWindow:
         self.result_label = tk.Label(self.root, text="", font=("Arial", 14, "bold"))
         self.result_label.pack(pady=20)
 
+        self.show_machines_button = tk.Button(
+            self.root,
+            text="Show Machines",
+            font=("Arial", 12, "bold"),
+            bg="blue",
+            fg="white",
+            command=self.show_machines
+        )
+        self.show_machines_button.pack(pady=10)
+
     def update_stats(self):
         self.duelist1_name_label.config(text=f"Name: {self.duelist1.name}")
         self.duelist1_life_label.config(
@@ -222,7 +292,13 @@ class GameWindow:
 
     def play_turn(self):
         choice = self.choice_entry.get()
-        self.duelist1.play_turn(self.duelist2, choice)
+
+        if self.current_player == self.duelist1:
+            opponent = self.duelist2
+        else:
+            opponent = self.duelist1
+
+        self.current_player.play_turn(opponent, choice)
         self.update_stats()
 
         if self.duelist1.life_points <= 0:
@@ -233,16 +309,20 @@ class GameWindow:
             self.play_button.config(state=tk.DISABLED)
 
         self.turn += 1
-        self.turn_label.config(text=f"Turn: {self.turn}")
+        self.current_player = self.duelist1 if self.turn % 2 != 0 else self.duelist2  # Atualizar jogador atual
+        self.current_player_label.config(text=f"Current Player: {self.current_player.name}")  # Atualizar rótulo
         self.choice_entry.delete(0, tk.END)
+
+
+
 
 
 def main():
     root = tk.Tk()
     root.title("Medieval Duel")
 
-    duelist1 = Duelist("Player", "../files/1.txt", 100)
-    duelist2 = Duelist("AI", "../files/2.txt", 100)
+    duelist1 = Duelist("Player", "../files/1.txt", 10)
+    duelist2 = Duelist("AI", "../files/2.txt", 10)
 
     game_window = GameWindow(root, duelist1, duelist2)
 
@@ -250,4 +330,6 @@ def main():
 
 
 if __name__ == "__main__":
-    main()
+    root = tk.Tk()
+    start_window = StartWindow(root)
+    root.mainloop()
