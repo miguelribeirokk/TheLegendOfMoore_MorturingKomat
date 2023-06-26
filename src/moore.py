@@ -2,15 +2,16 @@ import random
 
 
 class Duelist:
-    def __init__(self, name, machine_file, maxLife):
+    def __init__(self, name, machine_file, max_life):
+        self.opponent = None
         self.name = name
         self.state = None
         self.transitions = {}
         self.productions = {}
         self.actions = {}
         self.initial = None
-        self.max_life_points = maxLife
-        self.life_points = maxLife
+        self.max_life_points = max_life
+        self.life_points = max_life
         self.load_machine(machine_file)
 
     def load_machine(self, machine_file):
@@ -40,7 +41,7 @@ class Duelist:
     def add_production(self, state, production):
         self.productions[state] = production
 
-    def executeMachine(self, next_state, target):
+    def execute_machine(self, next_state, target):
         print(f"Próximo estado: {next_state}")
         print(f"Vida de {self.name}: {self.life_points}")
         production = self.productions[next_state]
@@ -68,10 +69,10 @@ class Duelist:
         print(f"Estado atual do duelista de {self.name}: {self.state}")
         print(f"Estado atual do duelista de {opponent.name}: {opponent.state}")
         print(f"Leitura: {choice}")
-        self.executeMachine(self.transitions[self.state][choice], self.opponent)
-        opponent.executeMachine(opponent.transitions[opponent.state][choice], self)
+        self.execute_machine(self.transitions[self.state][choice], self.opponent)
+        opponent.execute_machine(opponent.transitions[opponent.state][choice], self)
 
-        # Executar as ações dos dois duelistas ao mesmo tempo
+        # Executar as ações dos dois duelistas simultaneamente
         print(f"Ações do duelista de {self.name}: {self.actions[self.name]}")
         print(f"Ações do duelista de {opponent.name}: {opponent.actions[opponent.name]}")
         self.resolve_actions()
@@ -104,7 +105,7 @@ class Duelist:
                 print("Ambos defendem")
                 pass  # Nada acontece
 
-            # Apenas um ataca e o outro defende
+            # Apenas um oponente ataca e o outro defende
             else:
                 if action_self[1] == "Ataque" and action_opponent[1] == "Defesa":
                     print("Apenas um ataca e o outro defende")
@@ -175,8 +176,8 @@ duelist2 = input("Duelista 2: ")
 print("Insira a vida máxima dos dois duelistas:")
 max_life_points = int(input())
 
-d1 = Duelist(duelist1, "1.txt", max_life_points)
-d2 = Duelist(duelist2, "2.txt", max_life_points)
+d1 = Duelist(duelist1, "../files/1.txt", max_life_points)
+d2 = Duelist(duelist2, "../files/2.txt", max_life_points)
 
 print("Máquina de:", d1.name)
 d1.show_transitions()
