@@ -1,18 +1,19 @@
 import random
 
+
 def generate_moore_machine(num_states, output_file):
     states = ['S' + str(i) for i in range(1, num_states + 1)]
 
     initial_state = 'S1'
     transitions = []
-    estados_nao_alcacados = states.copy()
+    not_reached_states = states.copy()
 
     for state in states:
         for symbol in ['0', '1', '2']:
             # Dê prioridade para não alcançados
-            if len(estados_nao_alcacados) > 0:
-                next_state = random.choice(estados_nao_alcacados)
-                estados_nao_alcacados.remove(next_state)
+            if len(not_reached_states) > 0:
+                next_state = random.choice(not_reached_states)
+                not_reached_states.remove(next_state)
                 transitions.append((state, symbol, next_state))
             # Caso todos os estados já tenham sido alcançados, escolha um aleatório
             else:
@@ -30,5 +31,7 @@ def generate_moore_machine(num_states, output_file):
             current_state, input_symbol, next_state = transition
             file.write(current_state + " -> " + next_state + " | " + input_symbol + "\n")
 
-# Gerar uma máquina de Moore totalmente completa com 10 estados (incluindo o estado inicial "S1") e salvar no arquivo "moore_machine.txt"
-generate_moore_machine(10, "moore_machine.txt")
+
+# Gerar uma máquina de Moore totalmente completa com 10 estados (incluindo o estado inicial "S1") e salvar no arquivo
+# "moore_machine.txt"
+# generate_moore_machine(10, "../../files/moore_machine.txt")
