@@ -1,7 +1,7 @@
 import tkinter as tk
 import random
 from enum import Enum
-
+import generate_moore_machine as gmm
 
 class Action(Enum):
     ATTACK = "Attack"
@@ -53,7 +53,7 @@ class Duelist:
         production = self.productions[next_state]
 
         if production == Action.ATTACK:
-            damage = random.randint(0, 10)
+            damage = random.randint(0, 20)
             self.actions[self.name] = [damage, Action.ATTACK, target.name]
         elif production == Action.DEFENSE:
             defense = random.randint(0, 10)
@@ -132,7 +132,7 @@ class Duelist:
         transitions_window.title(f"Transitions for {self.name}")
 
         for current_state, transitions in self.transitions.items():
-            state_label = tk.Label(transitions_window, text=f"State: {current_state}", font=("Arial", 12, "bold"))
+            state_label = tk.Label(transitions_window, text=f"State: {current_state} -- Production: {self.productions[current_state].value}", font=("Arial", 12, "bold"))
             state_label.pack()
 
             for input_, next_state in transitions.items():
@@ -189,8 +189,11 @@ class StartWindow:
         duel_root = tk.Tk()
         duel_root.title("Medieval Duel")
 
-        duelist1 = Duelist(duelist1_name, "../files/1.txt", life_points)
-        duelist2 = Duelist(duelist2_name, "../files/2.txt", life_points)
+        gmm.generate_moore_machine(5, "../files/file1.txt")
+        gmm.generate_moore_machine(5, "../files/file2.txt")
+
+        duelist1 = Duelist(duelist1_name, "../files/file1.txt", life_points)
+        duelist2 = Duelist(duelist2_name, "../files/file2.txt", life_points)
 
         game_window = GameWindow(duel_root, duelist1, duelist2)
         duel_root.mainloop()
@@ -317,16 +320,7 @@ class GameWindow:
 
 
 
-def main():
-    root = tk.Tk()
-    root.title("Medieval Duel")
 
-    duelist1 = Duelist("Player", "../files/1.txt", 10)
-    duelist2 = Duelist("AI", "../files/2.txt", 10)
-
-    game_window = GameWindow(root, duelist1, duelist2)
-
-    root.mainloop()
 
 
 if __name__ == "__main__":
