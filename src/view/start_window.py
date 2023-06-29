@@ -4,8 +4,8 @@ from controller.generate_moore_machine import generate_moore_machine
 from model.duelist import Duelist
 from view.game_window import GameWindow
 
-duelist1_states_quantity = 5
-duelist2_states_quantity = 5
+duelist1_states_quantity = 8
+duelist2_states_quantity = 8
 
 duelist1_machine_file = '../files/file1.txt'
 duelist2_machine_file = '../files/file2.txt'
