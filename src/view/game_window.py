@@ -1,5 +1,16 @@
 import tkinter as tk
+from PIL import ImageTk, Image
 
+DUELIST1 = 0
+DUELIST2 = 1
+DUELIST1_ATAQUE = 2
+DUELIST2_ATAQUE = 3
+DUELIST1_DEFESA = 4
+DUELIST2_DEFESA = 5
+DUELIST1_CURA = 6
+DUELIST2_CURA = 7
+DUELIST1_MORTO = 8
+DUELIST2_MORTO = 9
 
 class GameWindow:
     def __init__(self, root, duelist1, duelist2):
@@ -17,11 +28,26 @@ class GameWindow:
         self.root = root
         self.duelist1 = duelist1
         self.duelist2 = duelist2
-
         self.turn = 1
+        self.imgs = self.import_imgs()
         self.current_player = self.duelist1 if self.turn % 2 != 0 else self.duelist2  # Definir jogador atual
         self.create_widgets()
         self.update_stats()
+
+    #import imgs from the /imgs file and put them in a data structure return the number of imgs imported
+    def import_imgs(self):
+        imgs = []
+        imgs.append(ImageTk.PhotoImage(Image.open("imgs/duelist1.png")))
+        imgs.append(ImageTk.PhotoImage(Image.open("imgs/duelist2.png")))
+        # imgs.append(ImageTk.PhotoImage(Image.open("imgs/duelist1_ataque.png")))
+        # imgs.append(ImageTk.PhotoImage(Image.open("imgs/duelist2_ataque.png")))
+        # imgs.append(ImageTk.PhotoImage(Image.open("imgs/duelist1_defesa.png")))
+        # imgs.append(ImageTk.PhotoImage(Image.open("imgs/duelist2_defesa.png")))
+        # imgs.append(ImageTk.PhotoImage(Image.open("imgs/duelist1_cura.png")))
+        # imgs.append(ImageTk.PhotoImage(Image.open("imgs/duelist2_cura.png")))
+        # imgs.append(ImageTk.PhotoImage(Image.open("imgs/duelist1_morto.png")))
+        # imgs.append(ImageTk.PhotoImage(Image.open("imgs/duelist2_morto.png")))
+        return imgs
 
     def show_machines(self):
         self.duelist1.show_transitions()
@@ -41,6 +67,8 @@ class GameWindow:
 
         duelist1_frame = tk.Frame(self.root, bd=2, relief=tk.RAISED)
         tk.Label(duelist1_frame, text="DUELISTA 1", font=("GodOfWar", 12)).pack()
+        duelist1_img = tk.Label(duelist1_frame, image=self.imgs[DUELIST1])
+        duelist1_img.pack()
         tk.Label(duelist1_frame, text=f"Nome: {self.duelist1.name}", font=("Arial", 12)).pack()
         self.duelist1_life_label = tk.Label(
             duelist1_frame,
@@ -56,6 +84,8 @@ class GameWindow:
 
         duelist2_frame = tk.Frame(self.root, bd=2, relief=tk.RAISED)
         tk.Label(duelist2_frame, text="DUELISTA 2", font=("GodOfWar", 12)).pack()
+        duelist2_img = tk.Label(duelist2_frame, image=self.imgs[DUELIST2])
+        duelist2_img.pack()
         tk.Label(duelist2_frame, text=f"Nome: {self.duelist2.name}", font=("Arial", 12)).pack()
 
         self.duelist2_life_label = tk.Label(
