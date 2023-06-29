@@ -29,29 +29,28 @@ class GameWindow:
         self.duelist1 = duelist1
         self.duelist2 = duelist2
         self.turn = 1
-        self.imgs = self.import_imgs()
         self.current_player = self.duelist1 if self.turn % 2 != 0 else self.duelist2  # Definir jogador atual
+        self.duelist1_img_nrm= ImageTk.PhotoImage(Image.open("imgs/duelist1.png"))
+        self.duelist2_img_nrm= ImageTk.PhotoImage(Image.open("imgs/duelist2.png"))
+        self.duelist1_img_atk= ImageTk.PhotoImage(Image.open("imgs/duelist1_ataque.png"))
+        self.duelist2_img_atk= ImageTk.PhotoImage(Image.open("imgs/duelist2_ataque.png"))
+        self.duelist1_img_def= ImageTk.PhotoImage(Image.open("imgs/duelist1_defesa.png"))
+        self.duelist2_img_def= ImageTk.PhotoImage(Image.open("imgs/duelist2_defesa.png"))
+        self.duelist1_img_cura= ImageTk.PhotoImage(Image.open("imgs/duelist1_cura.png"))
+        self.duelist2_img_cura= ImageTk.PhotoImage(Image.open("imgs/duelist2_cura.png"))
+        self.duelist1_img_morto= ImageTk.PhotoImage(Image.open("imgs/duelist1_morto.png"))
+        self.duelist2_img_morto= ImageTk.PhotoImage(Image.open("imgs/duelist2_morto.png"))
         self.create_widgets()
         self.update_stats()
+        self.duelist1_frame = None
+        self.duelist2_frame = None
 
-    #import imgs from the /imgs file and put them in a data structure return the number of imgs imported
-    def import_imgs(self):
-        imgs = []
-        imgs.append(ImageTk.PhotoImage(Image.open("imgs/duelist1.png")))
-        imgs.append(ImageTk.PhotoImage(Image.open("imgs/duelist2.png")))
-        # imgs.append(ImageTk.PhotoImage(Image.open("imgs/duelist1_ataque.png")))
-        # imgs.append(ImageTk.PhotoImage(Image.open("imgs/duelist2_ataque.png")))
-        # imgs.append(ImageTk.PhotoImage(Image.open("imgs/duelist1_defesa.png")))
-        # imgs.append(ImageTk.PhotoImage(Image.open("imgs/duelist2_defesa.png")))
-        # imgs.append(ImageTk.PhotoImage(Image.open("imgs/duelist1_cura.png")))
-        # imgs.append(ImageTk.PhotoImage(Image.open("imgs/duelist2_cura.png")))
-        # imgs.append(ImageTk.PhotoImage(Image.open("imgs/duelist1_morto.png")))
-        # imgs.append(ImageTk.PhotoImage(Image.open("imgs/duelist2_morto.png")))
-        return imgs
 
     def show_machines(self):
         self.duelist1.show_transitions()
         self.duelist2.show_transitions()
+
+        # Resto do código...
 
     def create_widgets(self):
 
@@ -65,39 +64,39 @@ class GameWindow:
                                              font=("Arial", 12, "bold"))
         self.current_player_label.pack(pady=5)
 
-        duelist1_frame = tk.Frame(self.root, bd=2, relief=tk.RAISED)
-        tk.Label(duelist1_frame, text="DUELISTA 1", font=("GodOfWar", 12)).pack()
-        duelist1_img = tk.Label(duelist1_frame, image=self.imgs[DUELIST1])
-        duelist1_img.pack()
-        tk.Label(duelist1_frame, text=f"Nome: {self.duelist1.name}", font=("Arial", 12)).pack()
+        self.duelist1_frame = tk.Frame(self.root, bd=2, relief=tk.RAISED)
+        tk.Label(self.duelist1_frame, text="DUELISTA 1", font=("GodOfWar", 12)).pack()
+        self.duelist1_img = tk.Label(self.duelist1_frame, image=self.duelist1_img_nrm)
+        self.duelist1_img.pack()
+        tk.Label(self.duelist1_frame, text=f"Nome: {self.duelist1.name}", font=("Arial", 12)).pack()
         self.duelist1_life_label = tk.Label(
-            duelist1_frame,
+            self.duelist1_frame,
             text=f"Vida atual: {self.duelist1.life_points}/{self.duelist1.max_life_points}",
             font=("Arial", 12)
         )
         self.duelist1_life_label.pack()
-        self.duelist1_state_label = tk.Label(duelist1_frame, text=f"Estado atual: {self.duelist1.state}",
+        self.duelist1_state_label = tk.Label(self.duelist1_frame, text=f"Estado atual: {self.duelist1.state}",
                                              font=("Arial", 12))
         self.duelist1_state_label.pack()
 
-        duelist1_frame.pack(side=tk.LEFT, padx=20)
+        self.duelist1_frame.pack(side=tk.LEFT, padx=20)
 
-        duelist2_frame = tk.Frame(self.root, bd=2, relief=tk.RAISED)
-        tk.Label(duelist2_frame, text="DUELISTA 2", font=("GodOfWar", 12)).pack()
-        duelist2_img = tk.Label(duelist2_frame, image=self.imgs[DUELIST2])
-        duelist2_img.pack()
-        tk.Label(duelist2_frame, text=f"Nome: {self.duelist2.name}", font=("Arial", 12)).pack()
+        self.duelist2_frame = tk.Frame(self.root, bd=2, relief=tk.RAISED)
+        tk.Label(self.duelist2_frame, text="DUELISTA 2", font=("GodOfWar", 12)).pack()
+        self.duelist2_img = tk.Label(self.duelist2_frame, image=self.duelist2_img_nrm)
+        self.duelist2_img.pack()
+        tk.Label(self.duelist2_frame, text=f"Nome: {self.duelist2.name}", font=("Arial", 12)).pack()
 
         self.duelist2_life_label = tk.Label(
-            duelist2_frame,
+            self.duelist2_frame,
             text=f"Vida atual: {self.duelist2.life_points}/{self.duelist2.max_life_points}",
             font=("Arial", 12)
         )
         self.duelist2_life_label.pack()
-        self.duelist2_state_label = tk.Label(duelist2_frame, text=f"Estado atual: {self.duelist2.state}",
+        self.duelist2_state_label = tk.Label(self.duelist2_frame, text=f"Estado atual: {self.duelist2.state}",
                                              font=("Arial", 12))
         self.duelist2_state_label.pack()
-        duelist2_frame.pack(side=tk.RIGHT, padx=20)
+        self.duelist2_frame.pack(side=tk.RIGHT, padx=20)
 
         self.turn_label = tk.Label(self.root, text=f"Turno: {self.turn}")
         self.turn_label.pack(pady=20)
@@ -154,13 +153,22 @@ class GameWindow:
         self.duelist2_state_label.config(text=f"Estado atual: {self.duelist2.state}")
 
         self.turn_label.config(text=f"Turno: {self.turn}")
-
+        nome1 = ""
+        valor1 = ""
+        nome2 = ""
+        valor2 = ""
+        for a in self.duelist1.actions.values():
+            nome1 = str(a[1].name)
+            valor1 = str(a[0])
+        for a in self.duelist2.actions.values():
+            nome2 = str(a[1].name)
+            valor2 = str(a[0])
         if self.current_player == self.duelist2:
             self.duelist1_actions_label.config(
-                text=f"Alcançou um estado de: {', '.join(str(a[1].name) + ' ' + str(a[0]) for a in self.duelist1.actions.values())}"
+                text=f"Alcançou um estado de: {str(nome1) + ' ' + str(valor1)}"
                      f" no duelista {self.duelist1.name}")
             self.duelist2_actions_label.config(
-                text=f"Alcançou um estado de: {', '.join(str(a[1].name) + ' ' + str(a[0]) for a in self.duelist2.actions.values())}"
+                text=f"Alcançou um estado de: {str(nome2)+ ' ' + str(valor2)}"
                      f" no duelista {self.duelist2.name}")
         else:
             self.duelist2_actions_label.config(
@@ -169,7 +177,27 @@ class GameWindow:
             self.duelist1_actions_label.config(
                 text=f"Alcançou um estado de: {', '.join(str(a[1].name) + ' ' + str(a[0]) for a in self.duelist1.actions.values())}"
                      f" no duelista {self.duelist1.name}")
+        try:
+            if nome1 == "CURA":
+                self.duelist1_img.config(image=self.duelist1_img_cura)
+            elif nome1 == "ATAQUE":
+                self.duelist1_img.config(image=self.duelist1_img_atk)
+            elif nome1 == "DEFESA":
+                self.duelist1_img.config(image=self.duelist1_img_def)
+            else:
+                self.duelist1_img.config(image=self.duelist1_img_nrm)
 
+            if nome2 == "CURA":
+                self.duelist2_img.config(image=self.duelist2_img_cura)
+            elif nome2 == "ATAQUE":
+                self.duelist2_img.config(image=self.duelist2_img_atk)
+            elif nome2 == "DEFESA":
+                self.duelist2_img.config(image=self.duelist2_img_def)
+            else:
+                self.duelist2_img.config(image=self.duelist2_img_nrm)
+
+        except:
+            pass
     def check_choice(self):
         try:
             choice = int(self.choice_entry.get())
@@ -195,12 +223,16 @@ class GameWindow:
 
         if self.duelist1.life_points <= 0 and self.duelist2.life_points <= 0:
             self.result_label.config(text=f"Empate!", fg="blue")
+            self.duelist1_img.config(image=self.duelist1_img_morto)
+            self.duelist2_img.config(image=self.duelist2_img_morto)
             self.play_button.config(state=tk.DISABLED)
         elif self.duelist2.life_points <= 0:
             self.result_label.config(text=f"{self.duelist2.name} foi derrotado!", fg="red")
+            self.duelist1_img.config(image=self.duelist2_img_morto)
             self.play_button.config(state=tk.DISABLED)
         elif self.duelist1.life_points <= 0:
             self.result_label.config(text=f"{self.duelist1.name} foi derrotado!", fg="red")
+            self.duelist2_img.config(image=self.duelist1_img_morto)
             self.play_button.config(state=tk.DISABLED)
 
         self.turn += 1
