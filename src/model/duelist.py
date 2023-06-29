@@ -1,8 +1,11 @@
 import random
 import tkinter as tk
-import tkinter.messagebox as messagebox
 
 from model.action_enum import Action
+
+max_attack = 20
+max_heal = 10
+max_defense = 10
 
 
 class Duelist:
@@ -51,13 +54,13 @@ class Duelist:
         production = self.productions[next_state]
 
         if production == Action.ATAQUE:
-            damage = random.randint(0, 20)
+            damage = random.randint(1, max_attack)
             self.actions[self.name] = [damage, Action.ATAQUE, target.name]
         elif production == Action.DEFESA:
-            defense = random.randint(0, 10)
+            defense = random.randint(1, max_defense)
             self.actions[self.name] = [defense, Action.DEFESA, self.name]
         elif production == Action.CURA:
-            heal = random.randint(0, 10)
+            heal = random.randint(1, max_heal)
             self.actions[self.name] = [heal, Action.CURA, self.name]
         self.state = next_state
 

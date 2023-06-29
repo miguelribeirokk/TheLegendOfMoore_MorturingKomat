@@ -27,14 +27,12 @@ class GameWindow:
         self.duelist1.show_transitions()
         self.duelist2.show_transitions()
 
-    # def show_productions(self):
-
     def create_widgets(self):
 
         tk.Label(self.root, text="DUELO MEDIEVAL", font=("GodOfWar", 20, "bold")).pack(pady=10)
 
         self.current_player_label = tk.Label(self.root, text=f"Turno de {self.current_player.name}",
-                                             font=("Arial", 14, "bold"), fg="blue")
+                                             font=("GodOfWar", 14, "bold"), fg="purple")
         self.current_player_label.pack(pady=5)
 
         self.current_player_label = tk.Label(self.root, text=f"Qual leitura você deseja fazer? ",
@@ -42,6 +40,7 @@ class GameWindow:
         self.current_player_label.pack(pady=5)
 
         duelist1_frame = tk.Frame(self.root, bd=2, relief=tk.RAISED)
+        tk.Label(duelist1_frame, text="DUELISTA 1", font=("GodOfWar", 12)).pack()
         tk.Label(duelist1_frame, text=f"Nome: {self.duelist1.name}", font=("Arial", 12)).pack()
         self.duelist1_life_label = tk.Label(
             duelist1_frame,
@@ -56,7 +55,9 @@ class GameWindow:
         duelist1_frame.pack(side=tk.LEFT, padx=20)
 
         duelist2_frame = tk.Frame(self.root, bd=2, relief=tk.RAISED)
+        tk.Label(duelist2_frame, text="DUELISTA 2", font=("GodOfWar", 12)).pack()
         tk.Label(duelist2_frame, text=f"Nome: {self.duelist2.name}", font=("Arial", 12)).pack()
+
         self.duelist2_life_label = tk.Label(
             duelist2_frame,
             text=f"Vida atual: {self.duelist2.life_points}/{self.duelist2.max_life_points}",
@@ -82,7 +83,7 @@ class GameWindow:
             font=("Arial", 12, "bold"),
             bg="green",
             fg="white",
-            command=self.play_turn
+            command=self.check_choice
         )
         self.play_button.pack(pady=10)
 
@@ -92,7 +93,7 @@ class GameWindow:
         # ver produções a cada turno
 
         duelist_actions_frame = tk.Frame(self.root, bd=2, relief=tk.RAISED)
-        tk.Label(duelist_actions_frame, text=f"Produções: ", font=("Arial", 12)).pack()
+        tk.Label(duelist_actions_frame, text=f"Produções: ", font=("GodOfWar", 12, "bold")).pack()
         self.duelist1_actions_label = tk.Label(duelist_actions_frame,
                                                text=f"", font=("Arial", 12))
 
@@ -118,7 +119,7 @@ class GameWindow:
         self.duelist1_state_label.config(text=f"Estado atual: {self.duelist1.state}")
 
         self.duelist2_life_label.config(
-            text=f"Vida atual: {self.duelist2.life_points }/{self.duelist2.max_life_points}"
+            text=f"Vida atual: {self.duelist2.life_points}/{self.duelist2.max_life_points}"
         )
         self.duelist2_state_label.config(text=f"Estado atual: {self.duelist2.state}")
 
@@ -132,14 +133,24 @@ class GameWindow:
                 text=f"Alcançou um estado de: {', '.join(str(a[1].name) + ' ' + str(a[0]) for a in self.duelist2.actions.values())}"
                      f" no duelista {self.duelist2.name}")
         else:
-            self.duelist1_actions_label.config(
+            self.duelist2_actions_label.config(
                 text=f"Alcançou um estado de: {', '.join(str(a[1].name) + ' ' + str(a[0]) for a in self.duelist2.actions.values())}"
                      f" no duelista {self.duelist2.name}")
-            self.duelist2_actions_label.config(
+            self.duelist1_actions_label.config(
                 text=f"Alcançou um estado de: {', '.join(str(a[1].name) + ' ' + str(a[0]) for a in self.duelist1.actions.values())}"
                      f" no duelista {self.duelist1.name}")
 
-        # se for turno do duelist2
+    def check_choice(self):
+        try:
+            choice = int(self.choice_entry.get())
+            if choice in [0, 1, 2]:
+                self.result_label.config(text="")
+                self.play_turn()
+            else:
+                self.result_label.config(text="Digite um número válido!", fg="red")
+        except ValueError:
+            self.result_label.config(text="Digite um número válido!", fg="red")
+
 
     def play_turn(self):
         choice = self.choice_entry.get()
@@ -151,7 +162,6 @@ class GameWindow:
 
         self.current_player.play_turn(opponent, choice)
         self.update_stats()
-        # self.show_productions()
 
         if self.duelist1.life_points <= 0 and self.duelist2.life_points <= 0:
             self.result_label.config(text=f"Empate!", fg="blue")

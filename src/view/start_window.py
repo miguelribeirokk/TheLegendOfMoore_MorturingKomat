@@ -40,8 +40,27 @@ class StartWindow:
             font=("Arial", 12, "bold"),
             bg="green",
             fg="white",
-            command=self.start_duel
+            command=self.check_life
         ).pack(pady=20)
+
+    def check_life(self):
+        try:
+            life = int(self.life_entry.get())
+            if not life or life <= 0:
+                self.popupmsg("Vida deve ser maior que 0")
+            else:
+                self.start_duel()
+        except ValueError:
+            self.popupmsg("Vida deve ser um número inteiro")
+
+    def popupmsg(self, msg):
+        popup = tk.Tk()
+        popup.wm_title("AVISO")
+        label = tk.Label(popup, text=msg, font=("Arial", 14))
+        label.pack(side="top", fill="x", pady=10)
+        B1 = tk.Button(popup, text="OK", command=popup.destroy, font=("Arial", 10), bg="red", fg="white")
+        B1.pack()
+        popup.mainloop()
 
     def start_duel(self):
         duelist1_name = self.duelist1_name_entry.get()
