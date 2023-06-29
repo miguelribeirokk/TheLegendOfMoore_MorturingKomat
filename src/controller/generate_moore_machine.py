@@ -30,8 +30,3 @@ def generate_moore_machine(num_states, output_file):
         for transition in transitions:
             current_state, input_symbol, next_state = transition
             file.write(current_state + " -> " + next_state + " | " + input_symbol + "\n")
-
-
-# Gerar uma máquina de Moore totalmente completa com 10 estados (incluindo o estado inicial "S1") e salvar no arquivo
-# "moore_machine.txt"
-# generate_moore_machine(10, "../../files/moore_machine.txt")

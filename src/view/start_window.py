@@ -4,6 +4,12 @@ from controller.generate_moore_machine import generate_moore_machine
 from model.duelist import Duelist
 from view.game_window import GameWindow
 
+duelist1_states_quantity = 5
+duelist2_states_quantity = 5
+
+duelist1_machine_file = '../files/file1.txt'
+duelist2_machine_file = '../files/file2.txt'
+
 
 class StartWindow:
     def __init__(self, root):
@@ -14,23 +20,23 @@ class StartWindow:
         self.create_widgets()
 
     def create_widgets(self):
-        tk.Label(self.root, text="Medieval Duel Setup", font=("Arial", 20, "bold")).pack(pady=10)
+        tk.Label(self.root, text="DUELO MEDIEVAL", font=("GodOfWar", 20, "bold")).pack(pady=10)
 
-        tk.Label(self.root, text="Duelist 1 Name:").pack()
-        self.duelist1_name_entry = tk.Entry(self.root, font=("Arial", 12))
+        tk.Label(self.root, text="Nome do duelista 2:", font=("Arial", 12)).pack()
+        self.duelist1_name_entry = tk.Entry(self.root, font=("Arial", 14))
         self.duelist1_name_entry.pack()
 
-        tk.Label(self.root, text="Duelist 2 Name:").pack()
-        self.duelist2_name_entry = tk.Entry(self.root, font=("Arial", 12))
+        tk.Label(self.root, text="Nome do duelista 1:", font=("Arial", 12)).pack()
+        self.duelist2_name_entry = tk.Entry(self.root, font=("Arial", 14))
         self.duelist2_name_entry.pack()
 
-        tk.Label(self.root, text="Life Points:").pack()
-        self.life_entry = tk.Entry(self.root, font=("Arial", 12))
+        tk.Label(self.root, text="Vida:", font=("Arial", 12)).pack()
+        self.life_entry = tk.Entry(self.root, font=("Arial", 14))
         self.life_entry.pack()
 
         tk.Button(
             self.root,
-            text="Start Duel",
+            text="Começar duelo",
             font=("Arial", 12, "bold"),
             bg="green",
             fg="white",
@@ -45,13 +51,13 @@ class StartWindow:
         self.root.destroy()
 
         duel_root = tk.Tk()
-        duel_root.title("Medieval Duel")
+        duel_root.title("Duelo Medieval")
 
-        generate_moore_machine(5, "../files/file1.txt")
-        generate_moore_machine(5, "../files/file2.txt")
+        generate_moore_machine(duelist1_states_quantity, duelist1_machine_file)
+        generate_moore_machine(duelist2_states_quantity, duelist2_machine_file)
 
-        duelist1 = Duelist(duelist1_name, "../files/file1.txt", life_points)
-        duelist2 = Duelist(duelist2_name, "../files/file2.txt", life_points)
+        duelist1 = Duelist(duelist1_name, duelist1_machine_file, life_points)
+        duelist2 = Duelist(duelist2_name, duelist2_machine_file, life_points)
 
         GameWindow(duel_root, duelist1, duelist2)
         duel_root.mainloop()
