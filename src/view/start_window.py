@@ -47,13 +47,13 @@ class StartWindow:
         try:
             life = int(self.life_entry.get())
             if not life or life <= 0:
-                self.popupmsg("Vida deve ser maior que 0")
+                self.popup_message("Vida deve ser maior que 0")
             else:
                 self.start_duel()
         except ValueError:
-            self.popupmsg("Vida deve ser um número inteiro")
+            self.popup_message("Vida deve ser um número inteiro")
 
-    def popupmsg(self, msg):
+    def popup_message(self, msg):
         popup = tk.Tk()
         popup.wm_title("AVISO")
         label = tk.Label(popup, text=msg, font=("Arial", 14))

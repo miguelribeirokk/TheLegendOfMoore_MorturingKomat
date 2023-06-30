@@ -12,6 +12,7 @@ DUELIST2_CURA = 7
 DUELIST1_MORTO = 8
 DUELIST2_MORTO = 9
 
+
 class GameWindow:
     def __init__(self, root, duelist1, duelist2):
         self.duelist1_state_label = None
@@ -30,27 +31,53 @@ class GameWindow:
         self.duelist2 = duelist2
         self.turn = 1
         self.current_player = self.duelist1 if self.turn % 2 != 0 else self.duelist2  # Definir jogador atual
-        self.duelist1_img_nrm= ImageTk.PhotoImage(Image.open("imgs/duelist1.png"))
-        self.duelist2_img_nrm= ImageTk.PhotoImage(Image.open("imgs/duelist2.png"))
-        self.duelist1_img_atk= ImageTk.PhotoImage(Image.open("imgs/duelist1_ataque.png"))
-        self.duelist2_img_atk= ImageTk.PhotoImage(Image.open("imgs/duelist2_ataque.png"))
-        self.duelist1_img_def= ImageTk.PhotoImage(Image.open("imgs/duelist1_defesa.png"))
-        self.duelist2_img_def= ImageTk.PhotoImage(Image.open("imgs/duelist2_defesa.png"))
-        self.duelist1_img_cura= ImageTk.PhotoImage(Image.open("imgs/duelist1_cura.png"))
-        self.duelist2_img_cura= ImageTk.PhotoImage(Image.open("imgs/duelist2_cura.png"))
-        self.duelist1_img_morto= ImageTk.PhotoImage(Image.open("imgs/duelist1_morto.png"))
-        self.duelist2_img_morto= ImageTk.PhotoImage(Image.open("imgs/duelist2_morto.png"))
+        self.duelist1_img_nrm = ImageTk.PhotoImage(Image.open("imgs/duelist1.png"))
+        self.duelist2_img_nrm = ImageTk.PhotoImage(Image.open("imgs/duelist2.png"))
+        self.duelist1_img_atk = ImageTk.PhotoImage(Image.open("imgs/duelist1_ataque.png"))
+        self.duelist2_img_atk = ImageTk.PhotoImage(Image.open("imgs/duelist2_ataque.png"))
+        self.duelist1_img_def = ImageTk.PhotoImage(Image.open("imgs/duelist1_defesa.png"))
+        self.duelist2_img_def = ImageTk.PhotoImage(Image.open("imgs/duelist2_defesa.png"))
+        self.duelist1_img_cura = ImageTk.PhotoImage(Image.open("imgs/duelist1_cura.png"))
+        self.duelist2_img_cura = ImageTk.PhotoImage(Image.open("imgs/duelist2_cura.png"))
+        self.duelist1_img_morto = ImageTk.PhotoImage(Image.open("imgs/duelist1_morto.png"))
+        self.duelist2_img_morto = ImageTk.PhotoImage(Image.open("imgs/duelist2_morto.png"))
         self.create_widgets()
         self.update_stats()
         self.duelist1_frame = None
         self.duelist2_frame = None
 
-
     def show_machines(self):
-        self.duelist1.show_transitions()
-        self.duelist2.show_transitions()
+        transitions_window = tk.Toplevel()
+        transitions_window.title(f"{self.duelist1.name}")
 
-        # Resto do código...
+        for current_state, transitions in self.duelist1.transitions.items():
+            tk.Label(transitions_window,
+                     text=f"Estado: {current_state} "
+                          f" → Produção: {self.duelist1.productions[current_state].value}",
+                     font=("Arial", 12, "bold")).pack()
+
+            for input_, next_state in transitions.items():
+                tk.Label(
+                    transitions_window,
+                    text=f"{input_} → {next_state}",
+                    font=("Arial", 10)
+                ).pack()
+
+        transitions_window2 = tk.Toplevel()
+        transitions_window2.title(f"{self.duelist2.name}")
+
+        for current_state, transitions in self.duelist2.transitions.items():
+            tk.Label(transitions_window2,
+                     text=f"Estado: {current_state} "
+                          f" → Produção: {self.duelist2.productions[current_state].value}",
+                     font=("Arial", 12, "bold")).pack()
+
+            for input_, next_state in transitions.items():
+                tk.Label(
+                    transitions_window2,
+                    text=f"{input_} → {next_state}",
+                    font=("Arial", 10)
+                ).pack()
 
     def create_widgets(self):
 
@@ -168,15 +195,15 @@ class GameWindow:
                 text=f"Alcançou um estado de: {str(nome1) + ' ' + str(valor1)}"
                      f" no duelista {self.duelist1.name}")
             self.duelist2_actions_label.config(
-                text=f"Alcançou um estado de: {str(nome2)+ ' ' + str(valor2)}"
+                text=f"Alcançou um estado de: {str(nome2) + ' ' + str(valor2)}"
                      f" no duelista {self.duelist2.name}")
         else:
-            self.duelist2_actions_label.config(
-                text=f"Alcançou um estado de: {', '.join(str(a[1].name) + ' ' + str(a[0]) for a in self.duelist2.actions.values())}"
-                     f" no duelista {self.duelist2.name}")
             self.duelist1_actions_label.config(
                 text=f"Alcançou um estado de: {', '.join(str(a[1].name) + ' ' + str(a[0]) for a in self.duelist1.actions.values())}"
                      f" no duelista {self.duelist1.name}")
+            self.duelist2_actions_label.config(
+                text=f"Alcançou um estado de: {', '.join(str(a[1].name) + ' ' + str(a[0]) for a in self.duelist2.actions.values())}"
+                     f" no duelista {self.duelist2.name}")
         try:
             if nome1 == "CURA":
                 self.duelist1_img.config(image=self.duelist1_img_cura)
@@ -198,6 +225,7 @@ class GameWindow:
 
         except:
             pass
+
     def check_choice(self):
         try:
             choice = int(self.choice_entry.get())
@@ -208,7 +236,6 @@ class GameWindow:
                 self.result_label.config(text="Digite um número válido!", fg="red")
         except ValueError:
             self.result_label.config(text="Digite um número válido!", fg="red")
-
 
     def play_turn(self):
         choice = self.choice_entry.get()
