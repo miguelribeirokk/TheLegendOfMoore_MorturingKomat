@@ -87,9 +87,9 @@ class GameWindow:
                                              font=("GodOfWar", 14, "bold"), fg="purple")
         self.current_player_label.pack(pady=5)
 
-        self.current_player_label = tk.Label(self.root, text=f"Qual leitura você deseja fazer? ",
+        self.reading_label = tk.Label(self.root, text=f"Qual leitura você deseja fazer? ",
                                              font=("Arial", 12, "bold"))
-        self.current_player_label.pack(pady=5)
+        self.reading_label.pack(pady=5)
 
         self.duelist1_frame = tk.Frame(self.root, bd=2, relief=tk.RAISED)
         tk.Label(self.duelist1_frame, text="DUELISTA 1", font=("GodOfWar", 12)).pack()
@@ -169,6 +169,10 @@ class GameWindow:
         ).pack(pady=10)
 
     def update_stats(self):
+
+        self.current_player_label.config(text=f"Turno de {self.current_player.name}", fg="purple",
+                                         font=("GodOfWar", 14, "bold"))
+
         self.duelist1_life_label.config(
             text=f"Vida atual: {self.duelist1.life_points}/{self.duelist1.max_life_points}"
         )
@@ -198,10 +202,10 @@ class GameWindow:
                 text=f"Alcançou um estado de: {str(nome2) + ' ' + str(valor2)}"
                      f" no duelista {self.duelist2.name}")
         else:
-            self.duelist1_actions_label.config(
+            self.duelist2_actions_label.config(
                 text=f"Alcançou um estado de: {', '.join(str(a[1].name) + ' ' + str(a[0]) for a in self.duelist1.actions.values())}"
                      f" no duelista {self.duelist1.name}")
-            self.duelist2_actions_label.config(
+            self.duelist1_actions_label.config(
                 text=f"Alcançou um estado de: {', '.join(str(a[1].name) + ' ' + str(a[0]) for a in self.duelist2.actions.values())}"
                      f" no duelista {self.duelist2.name}")
         try:
