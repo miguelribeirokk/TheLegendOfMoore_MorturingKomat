@@ -5,7 +5,7 @@ from model.action_enum import Action
 
 max_attack = 20
 max_heal = 10
-max_defense = 10
+max_defense = 15
 
 
 class Duelist:
