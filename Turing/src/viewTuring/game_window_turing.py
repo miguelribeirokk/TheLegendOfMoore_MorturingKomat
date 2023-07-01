@@ -52,29 +52,34 @@ class GameWindow:
         self.duelist2_frame = None
 
     def show_machines(self):
+        def create_tape_label(window, tape):
+            tk.Label(
+                window,
+                text="Fita:",
+                font=("Arial", 12, "bold")
+            ).pack()
+
+            tape_str = ""
+            for character in tape:
+                if character == '<':
+                    tape_str += f"{character} | "
+                elif character == ' ':
+                    tape_str += f"{character} | ..."
+                else:
+                    tape_str += f"{character} | "
+
+            tk.Label(
+                window,
+                text=f"[ {tape_str} ]",
+                font=("Arial", 10),
+                wraplength=300  # Define um limite de largura para a label da fita
+            ).pack()
+
         transitions_window = tk.Toplevel()
         transitions_window.title(f"{self.duelist1.name}")
         transitions_window.geometry("500x800")
 
-        tk.Label(
-            transitions_window,
-            text="Fita:",
-            font=("Arial", 12, "bold")
-        ).pack()
-
-        for character in self.duelist1.tape:
-            if character == '<':
-                fita = f"{character} | "
-            elif character == ' ':
-                fita += f"{character} | ..."
-            else:
-                fita += f"{character} | "
-
-        tk.Label(
-            transitions_window,
-            text=f"[ {fita} ]",
-            font=("Arial", 10)
-        ).pack()
+        create_tape_label(transitions_window, self.duelist1.tape)
 
         for current_state, transitions in self.duelist1.transitions.items():
             tk.Label(transitions_window,
@@ -92,25 +97,7 @@ class GameWindow:
         transitions_window2.title(f"{self.duelist2.name}")
         transitions_window2.geometry("500x800")
 
-        tk.Label(
-            transitions_window2,
-            text="Fita:",
-            font=("Arial", 12)
-        ).pack()
-
-        for character in self.duelist2.tape:
-            if character == '<':
-                fita = f"{character} | "
-            elif character == ' ':
-                fita += f"{character} | ..."
-            else:
-                fita += f"{character} | "
-
-        tk.Label(
-            transitions_window2,
-            text=f"[ {fita} ]",
-            font=("Arial", 10)
-        ).pack()
+        create_tape_label(transitions_window2, self.duelist2.tape)
 
         for current_state, transitions in self.duelist2.transitions.items():
             tk.Label(transitions_window2,
