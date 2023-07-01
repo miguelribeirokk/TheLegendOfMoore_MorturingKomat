@@ -12,6 +12,11 @@ DUELIST2_CURA = 7
 DUELIST1_MORTO = 8
 DUELIST2_MORTO = 9
 
+productions = {'A': 'Ataque',
+               'D': 'Defesa',
+               'C': 'Cura'
+               }
+
 
 class GameWindow:
     def __init__(self, root, duelist1, duelist2):
@@ -49,46 +54,86 @@ class GameWindow:
     def show_machines(self):
         transitions_window = tk.Toplevel()
         transitions_window.title(f"{self.duelist1.name}")
+        transitions_window.geometry("500x800")
+
+        tk.Label(
+            transitions_window,
+            text="Fita:",
+            font=("Arial", 12, "bold")
+        ).pack()
+
+        for character in self.duelist1.tape:
+            if character == '<':
+                fita = f"{character} | "
+            elif character == ' ':
+                fita += f"{character} | ..."
+            else:
+                fita += f"{character} | "
+
+        tk.Label(
+            transitions_window,
+            text=f"[ {fita} ]",
+            font=("Arial", 10)
+        ).pack()
 
         for current_state, transitions in self.duelist1.transitions.items():
             tk.Label(transitions_window,
-                     text=f"Estado: {current_state} "
-                          f" → Produção: {self.duelist1.productions[current_state].value}",
+                     text=f"Estado: {current_state}",
                      font=("Arial", 12, "bold")).pack()
 
-            for input_, next_state in transitions.items():
+            for read, next_state in transitions.items():
                 tk.Label(
                     transitions_window,
-                    text=f"{input_} → {next_state}",
+                    text=f"{read} → {next_state}",
                     font=("Arial", 10)
                 ).pack()
 
         transitions_window2 = tk.Toplevel()
         transitions_window2.title(f"{self.duelist2.name}")
+        transitions_window2.geometry("500x800")
+
+        tk.Label(
+            transitions_window2,
+            text="Fita:",
+            font=("Arial", 12)
+        ).pack()
+
+        for character in self.duelist2.tape:
+            if character == '<':
+                fita = f"{character} | "
+            elif character == ' ':
+                fita += f"{character} | ..."
+            else:
+                fita += f"{character} | "
+
+        tk.Label(
+            transitions_window2,
+            text=f"[ {fita} ]",
+            font=("Arial", 10)
+        ).pack()
 
         for current_state, transitions in self.duelist2.transitions.items():
             tk.Label(transitions_window2,
-                     text=f"Estado: {current_state} "
-                          f" → Produção: {self.duelist2.productions[current_state].value}",
+                     text=f"Estado: {current_state}",
                      font=("Arial", 12, "bold")).pack()
 
-            for input_, next_state in transitions.items():
+            for read, next_state in transitions.items():
                 tk.Label(
                     transitions_window2,
-                    text=f"{input_} → {next_state}",
+                    text=f"{read} → {next_state}",
                     font=("Arial", 10)
                 ).pack()
 
     def create_widgets(self):
 
-        tk.Label(self.root, text="DUELO MEDIEVAL", font=("GodOfWar", 20, "bold")).pack(pady=10)
+        tk.Label(self.root, text="DUELO MEDIEVAL TURING", font=("GodOfWar", 20, "bold")).pack(pady=10)
 
         self.current_player_label = tk.Label(self.root, text=f"Turno de {self.current_player.name}",
                                              font=("GodOfWar", 14, "bold"), fg="purple")
         self.current_player_label.pack(pady=5)
 
         self.reading_label = tk.Label(self.root, text=f"Qual leitura você deseja fazer? ",
-                                             font=("Arial", 12, "bold"))
+                                      font=("Arial", 12, "bold"))
         self.reading_label.pack(pady=5)
 
         self.duelist1_frame = tk.Frame(self.root, bd=2, relief=tk.RAISED)
@@ -149,7 +194,7 @@ class GameWindow:
         # ver produções a cada turno
 
         duelist_actions_frame = tk.Frame(self.root, bd=2, relief=tk.RAISED)
-        tk.Label(duelist_actions_frame, text=f"Produções: ", font=("GodOfWar", 12, "bold")).pack()
+        tk.Label(duelist_actions_frame, text=f"Escritas na fita: ", font=("GodOfWar", 12, "bold")).pack()
         self.duelist1_actions_label = tk.Label(duelist_actions_frame,
                                                text=f"", font=("Arial", 12))
 
@@ -161,7 +206,7 @@ class GameWindow:
 
         tk.Button(
             self.root,
-            text="Ver máquinas",
+            text="Ver máquinas e fitas",
             font=("Arial", 12, "bold"),
             bg="blue",
             fg="white",
@@ -189,40 +234,40 @@ class GameWindow:
         nome2 = ""
         valor2 = ""
         for a in self.duelist1.actions.values():
-            nome1 = str(a[1].name)
+            nome1 = productions[a[1]]
             valor1 = str(a[0])
         for a in self.duelist2.actions.values():
-            nome2 = str(a[1].name)
+            nome2 = productions[a[1]]
             valor2 = str(a[0])
         if self.current_player == self.duelist2:
             self.duelist1_actions_label.config(
-                text=f"Alcançou um estado de: {str(nome1) + ' ' + str(valor1)}"
+                text=f"Escreveu e efetuou: {nome1 + ' ' + valor1}"
                      f" no duelista {self.duelist1.name}")
             self.duelist2_actions_label.config(
-                text=f"Alcançou um estado de: {str(nome2) + ' ' + str(valor2)}"
+                text=f"Escreveu e efeuou: {nome2 + ' ' + valor2}"
                      f" no duelista {self.duelist2.name}")
         else:
             self.duelist2_actions_label.config(
-                text=f"Alcançou um estado de: {', '.join(str(a[1].name) + ' ' + str(a[0]) for a in self.duelist1.actions.values())}"
+                text=f"Escreveu e efeuou: {', '.join(nome2 + ' ' + str(a[0]) for a in self.duelist1.actions.values())}"
                      f" no duelista {self.duelist1.name}")
             self.duelist1_actions_label.config(
-                text=f"Alcançou um estado de: {', '.join(str(a[1].name) + ' ' + str(a[0]) for a in self.duelist2.actions.values())}"
+                text=f"Escreveu e efeuou: {', '.join(nome1 + ' ' + str(a[0]) for a in self.duelist2.actions.values())}"
                      f" no duelista {self.duelist2.name}")
         try:
-            if nome1 == "CURA":
+            if nome1 == "Cura":
                 self.duelist1_img.config(image=self.duelist1_img_cura)
-            elif nome1 == "ATAQUE":
+            elif nome1 == "Ataque":
                 self.duelist1_img.config(image=self.duelist1_img_atk)
-            elif nome1 == "DEFESA":
+            elif nome1 == "Defesa":
                 self.duelist1_img.config(image=self.duelist1_img_def)
             else:
                 self.duelist1_img.config(image=self.duelist1_img_nrm)
 
-            if nome2 == "CURA":
+            if nome2 == "Cura":
                 self.duelist2_img.config(image=self.duelist2_img_cura)
-            elif nome2 == "ATAQUE":
+            elif nome2 == "Ataque":
                 self.duelist2_img.config(image=self.duelist2_img_atk)
-            elif nome2 == "DEFESA":
+            elif nome2 == "Defesa":
                 self.duelist2_img.config(image=self.duelist2_img_def)
             else:
                 self.duelist2_img.config(image=self.duelist2_img_nrm)

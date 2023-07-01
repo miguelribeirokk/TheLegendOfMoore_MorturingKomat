@@ -12,10 +12,6 @@ DUELIST2_CURA = 7
 DUELIST1_MORTO = 8
 DUELIST2_MORTO = 9
 
-productions = {'A': 'Ataque',
-               'D': 'Defesa',
-               'C': 'Cura'
-               }
 
 class GameWindow:
     def __init__(self, root, duelist1, duelist2):
@@ -56,74 +52,36 @@ class GameWindow:
 
         for current_state, transitions in self.duelist1.transitions.items():
             tk.Label(transitions_window,
-                     text=f"Estado: {current_state}",
+                     text=f"Estado: {current_state} "
+                          f" → Produção: {self.duelist1.productions[current_state].value}",
                      font=("Arial", 12, "bold")).pack()
 
-            for read, next_state in transitions.items():
+            for input_, next_state in transitions.items():
                 tk.Label(
                     transitions_window,
-                    text=f"{read} → {next_state}",
+                    text=f"{input_} → {next_state}",
                     font=("Arial", 10)
                 ).pack()
-
-        tk.Label(
-            transitions_window,
-            text="Fita:",
-            font=("Arial", 10)
-        ).pack()
-
-        for character in self.duelist1.tape:
-            if character == '<':
-                fita = f"{character} | "
-            elif character == ' ':
-                fita += f"{character} | ..."
-            else:
-                fita += f"{character} | "
-
-        tk.Label(
-            transitions_window,
-            text=f"[ {fita} ]",
-            font=("Arial", 10)
-        ).pack()
 
         transitions_window2 = tk.Toplevel()
         transitions_window2.title(f"{self.duelist2.name}")
 
         for current_state, transitions in self.duelist2.transitions.items():
             tk.Label(transitions_window2,
-                     text=f"Estado: {current_state}",
+                     text=f"Estado: {current_state} "
+                          f" → Produção: {self.duelist2.productions[current_state].value}",
                      font=("Arial", 12, "bold")).pack()
 
-            for read, next_state in transitions.items():
+            for input_, next_state in transitions.items():
                 tk.Label(
                     transitions_window2,
-                    text=f"{read} → {next_state}",
+                    text=f"{input_} → {next_state}",
                     font=("Arial", 10)
                 ).pack()
 
-        tk.Label(
-            transitions_window2,
-            text="Fita:",
-            font=("Arial", 10)
-        ).pack()
-
-        for character in self.duelist2.tape:
-            if character == '<':
-                fita = f"{character} | "
-            elif character == ' ':
-                fita += f"{character} | ..."
-            else:
-                fita += f"{character} | "
-
-        tk.Label(
-            transitions_window2,
-            text=f"[ {fita} ]",
-            font=("Arial", 10)
-        ).pack()
-
     def create_widgets(self):
 
-        tk.Label(self.root, text="DUELO MEDIEVAL", font=("GodOfWar", 20, "bold")).pack(pady=10)
+        tk.Label(self.root, text="DUELO MEDIEVAL MOORE", font=("GodOfWar", 20, "bold")).pack(pady=10)
 
         self.current_player_label = tk.Label(self.root, text=f"Turno de {self.current_player.name}",
                                              font=("GodOfWar", 14, "bold"), fg="purple")
@@ -231,40 +189,40 @@ class GameWindow:
         nome2 = ""
         valor2 = ""
         for a in self.duelist1.actions.values():
-            nome1 = productions[a[1]]
+            nome1 = str(a[1].name)
             valor1 = str(a[0])
         for a in self.duelist2.actions.values():
-            nome2 = productions[a[1]]
+            nome2 = str(a[1].name)
             valor2 = str(a[0])
         if self.current_player == self.duelist2:
             self.duelist1_actions_label.config(
-                text=f"Alcançou um estado de: {nome1 + ' ' + valor1}"
+                text=f"Alcançou um estado de: {str(nome1) + ' ' + str(valor1)}"
                      f" no duelista {self.duelist1.name}")
             self.duelist2_actions_label.config(
-                text=f"Alcançou um estado de: {nome2 + ' ' + valor2}"
+                text=f"Alcançou um estado de: {str(nome2) + ' ' + str(valor2)}"
                      f" no duelista {self.duelist2.name}")
         else:
             self.duelist2_actions_label.config(
-                text=f"Alcançou um estado de: {', '.join(nome2 + ' ' + str(a[0]) for a in self.duelist1.actions.values())}"
+                text=f"Alcançou um estado de: {', '.join(str(a[1].name) + ' ' + str(a[0]) for a in self.duelist1.actions.values())}"
                      f" no duelista {self.duelist1.name}")
             self.duelist1_actions_label.config(
-                text=f"Alcançou um estado de: {', '.join(nome1 + ' ' + str(a[0]) for a in self.duelist2.actions.values())}"
+                text=f"Alcançou um estado de: {', '.join(str(a[1].name) + ' ' + str(a[0]) for a in self.duelist2.actions.values())}"
                      f" no duelista {self.duelist2.name}")
         try:
-            if nome1 == "Cura":
+            if nome1 == "CURA":
                 self.duelist1_img.config(image=self.duelist1_img_cura)
-            elif nome1 == "Ataque":
+            elif nome1 == "ATAQUE":
                 self.duelist1_img.config(image=self.duelist1_img_atk)
-            elif nome1 == "Defesa":
+            elif nome1 == "DEFESA":
                 self.duelist1_img.config(image=self.duelist1_img_def)
             else:
                 self.duelist1_img.config(image=self.duelist1_img_nrm)
 
-            if nome2 == "Cura":
+            if nome2 == "CURA":
                 self.duelist2_img.config(image=self.duelist2_img_cura)
-            elif nome2 == "Ataque":
+            elif nome2 == "ATAQUE":
                 self.duelist2_img.config(image=self.duelist2_img_atk)
-            elif nome2 == "Defesa":
+            elif nome2 == "DEFESA":
                 self.duelist2_img.config(image=self.duelist2_img_def)
             else:
                 self.duelist2_img.config(image=self.duelist2_img_nrm)

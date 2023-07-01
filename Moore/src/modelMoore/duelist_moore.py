@@ -1,6 +1,6 @@
 import random
 
-from model.action_enum import Action
+from modelMoore.action_enum_moore import Action
 
 max_attack = 20
 max_heal = 10

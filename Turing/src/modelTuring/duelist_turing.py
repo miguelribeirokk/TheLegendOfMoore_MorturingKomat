@@ -1,6 +1,6 @@
 import random
 
-from model.action_enum import Action
+from modelTuring.action_enum_turing import  Action
 
 max_attack = 20
 max_heal = 10

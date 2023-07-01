@@ -1,14 +1,14 @@
 import tkinter as tk
 
-from controller.generate_turing_machine import generate_turing_machine
-from model.duelist import Duelist
-from view.game_window import GameWindow
+from controllerMoore.generate_moore_machine import generate_moore_machine
+from modelMoore.duelist_moore import Duelist
+from viewMoore.game_window_moore import GameWindow
 
 duelist1_states_quantity = 8
 duelist2_states_quantity = 8
 
-duelist1_machine_file = '../files/file1.txt'
-duelist2_machine_file = '../files/file2.txt'
+duelist1_machine_file = '../files/moore1.txt'
+duelist2_machine_file = '../files/moore2.txt'
 
 
 class StartWindow:
@@ -21,7 +21,7 @@ class StartWindow:
 
     def create_widgets(self):
         tk.Label(self.root, text="DUELO MEDIEVAL", font=("GodOfWar", 20, "bold")).pack(pady=10)
-
+        tk.Label(self.root, text="MÁQUINA DE MOORE", font=("GodOfWar", 20, "bold"), fg="purple").pack(pady=10)
         tk.Label(self.root, text="Nome do duelista 1:", font=("Arial", 12)).pack()
         self.duelist1_name_entry = tk.Entry(self.root, font=("Arial", 14))
         self.duelist1_name_entry.pack()
@@ -70,10 +70,10 @@ class StartWindow:
         self.root.destroy()
 
         duel_root = tk.Tk()
-        duel_root.title("Duelo Medieval")
+        duel_root.title("Duelo Medieval Moore")
 
-        generate_turing_machine(duelist1_states_quantity, duelist1_machine_file)
-        generate_turing_machine(duelist2_states_quantity, duelist2_machine_file)
+        generate_moore_machine(duelist1_states_quantity, duelist1_machine_file)
+        generate_moore_machine(duelist2_states_quantity, duelist2_machine_file)
 
         duelist1 = Duelist(duelist1_name, duelist1_machine_file, life_points)
         duelist2 = Duelist(duelist2_name, duelist2_machine_file, life_points)

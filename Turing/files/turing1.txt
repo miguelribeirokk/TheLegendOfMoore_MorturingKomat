@@ -1,0 +1,26 @@
+Q: S1 S2 S3 S4 S5 S6 S7 S8
+I: S1
+S1 -> S7 | 0 / A D
+S1 -> S3 | 1 / A D
+S1 -> S6 | 2 / A D
+S2 -> S2 | 0 / A D
+S2 -> S4 | 1 / A D
+S2 -> S5 | 2 / A D
+S3 -> S1 | 0 / A D
+S3 -> S8 | 1 / A D
+S3 -> S2 | 2 / A D
+S4 -> S2 | 0 / C D
+S4 -> S6 | 1 / C D
+S4 -> S2 | 2 / C D
+S5 -> S6 | 0 / A D
+S5 -> S7 | 1 / A D
+S5 -> S8 | 2 / A D
+S6 -> S6 | 0 / D D
+S6 -> S4 | 1 / D D
+S6 -> S4 | 2 / D D
+S7 -> S6 | 0 / A D
+S7 -> S6 | 1 / A D
+S7 -> S8 | 2 / A D
+S8 -> S3 | 0 / C D
+S8 -> S1 | 1 / C D
+S8 -> S7 | 2 / C D

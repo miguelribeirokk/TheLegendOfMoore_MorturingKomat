@@ -1,6 +1,6 @@
 import tkinter as tk
 
-from view.start_window import StartWindow
+from viewTuring.start_window_turing import StartWindow
 
 if __name__ == "__main__":
     root = tk.Tk()
