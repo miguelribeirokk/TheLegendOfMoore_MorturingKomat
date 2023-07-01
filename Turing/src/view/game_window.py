@@ -207,10 +207,10 @@ class GameWindow:
                      f" no duelista {self.duelist2.name}")
         else:
             self.duelist2_actions_label.config(
-                text=f"Alcançou um estado de: {', '.join(a[1] + ' ' + str(a[0]) for a in self.duelist1.actions.values())}"
+                text=f"Alcançou um estado de: {', '.join(nome2 + ' ' + str(a[0]) for a in self.duelist1.actions.values())}"
                      f" no duelista {self.duelist1.name}")
             self.duelist1_actions_label.config(
-                text=f"Alcançou um estado de: {', '.join(a[1] + ' ' + str(a[0]) for a in self.duelist2.actions.values())}"
+                text=f"Alcançou um estado de: {', '.join(nome1 + ' ' + str(a[0]) for a in self.duelist2.actions.values())}"
                      f" no duelista {self.duelist2.name}")
         try:
             if nome1 == "Cura":
