@@ -12,7 +12,8 @@ class Duelist:
         self.name = name
         self.state = "S1"
         self.transitions = {}
-        self.productions = {}
+        self.tape = ['<', ' ']
+        self.head = 1
         self.actions = {}
         self.initial = None
         self.max_life_points = max_life
@@ -32,38 +33,47 @@ class Duelist:
             line = line.strip().split(' ')
             current_state = line[0]
             next_state = line[2]
-            input_ = line[4]
-            production = random.choice(list(Action))
-            self.add_transition(current_state, next_state, input_)
-            self.add_production(current_state, production)
+            read = line[4]
+            write = line[6]
+            direction = line[7]
+            self.add_transition(current_state, next_state, read, write, direction)
 
     @property
     def get_actions(self):
         return self.actions
 
-    def add_transition(self, current_state, next_state, input_):
+    def add_transition(self, current_state, next_state, read, write, direction):
         if current_state not in self.transitions:
             self.transitions[current_state] = {}
-        self.transitions[current_state][input_] = next_state
-
-    def add_production(self, state, production):
-        self.productions[state] = production
+        self.transitions[current_state][read] = [next_state, write, direction]
 
     def remove_actions(self):
         self.actions = {}
 
-    def execute_machine(self, next_state, target):
-        production = self.productions[next_state]
+    def execute_machine(self, choice, target):
+        if self.tape[self.head] == ' ':
+            self.tape[self.head] = str(choice)
+            self.tape.append(' ')
 
-        if production == Action.ATAQUE:
+        next_state = self.transitions[self.state][self.tape[self.head]][0]
+        write = self.transitions[self.state][self.tape[self.head]][1]
+        direction = self.transitions[self.state][self.tape[self.head]][2]
+
+        self.tape[self.head] = write
+
+        if self.tape[self.head] == Action.ATAQUE:
             damage = random.randint(1, max_attack)
             self.actions[self.name] = [damage, Action.ATAQUE, target.name]
-        elif production == Action.DEFESA:
+        elif self.tape[self.head] == Action.DEFESA:
             defense = random.randint(1, max_defense)
             self.actions[self.name] = [defense, Action.DEFESA, self.name]
-        elif production == Action.CURA:
+        elif self.tape[self.head] == Action.CURA:
             heal = random.randint(1, max_heal)
             self.actions[self.name] = [heal, Action.CURA, self.name]
+        if direction == 'D':
+            self.head += 1
+        elif direction == 'E':
+            self.head -= 1
         self.state = next_state
 
     def play_turn(self, opponent, choice):
@@ -75,8 +85,8 @@ class Duelist:
         if opponent.state is None:
             opponent.state = opponent.initial
 
-        self.execute_machine(self.transitions[self.state][choice], opponent)
-        opponent.execute_machine(opponent.transitions[opponent.state][choice], self)
+        self.execute_machine(choice, opponent)
+        opponent.execute_machine(choice, self)
 
         self.resolve_actions(opponent)
 
