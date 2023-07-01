@@ -56,8 +56,7 @@ class GameWindow:
 
         for current_state, transitions in self.duelist1.transitions.items():
             tk.Label(transitions_window,
-                     text=f"Estado: {current_state} "
-                          f" → Produção: {productions[self.duelist1.transitions[current_state]['0'][1]]}",
+                     text=f"Estado: {current_state}",
                      font=("Arial", 12, "bold")).pack()
 
             for read, next_state in transitions.items():
@@ -67,13 +66,32 @@ class GameWindow:
                     font=("Arial", 10)
                 ).pack()
 
+        tk.Label(
+            transitions_window,
+            text="Fita:",
+            font=("Arial", 10)
+        ).pack()
+
+        for character in self.duelist1.tape:
+            if character == '<':
+                fita = f"{character} | "
+            elif character == ' ':
+                fita += f"{character} | ..."
+            else:
+                fita += f"{character} | "
+
+        tk.Label(
+            transitions_window,
+            text=f"[ {fita} ]",
+            font=("Arial", 10)
+        ).pack()
+
         transitions_window2 = tk.Toplevel()
         transitions_window2.title(f"{self.duelist2.name}")
 
         for current_state, transitions in self.duelist2.transitions.items():
             tk.Label(transitions_window2,
-                     text=f"Estado: {current_state} "
-                          f" → Produção: {productions[self.duelist2.transitions[current_state]['0'][1]]}",
+                     text=f"Estado: {current_state}",
                      font=("Arial", 12, "bold")).pack()
 
             for read, next_state in transitions.items():
@@ -82,6 +100,26 @@ class GameWindow:
                     text=f"{read} → {next_state}",
                     font=("Arial", 10)
                 ).pack()
+
+        tk.Label(
+            transitions_window2,
+            text="Fita:",
+            font=("Arial", 10)
+        ).pack()
+
+        for character in self.duelist2.tape:
+            if character == '<':
+                fita = f"{character} | "
+            elif character == ' ':
+                fita += f"{character} | ..."
+            else:
+                fita += f"{character} | "
+
+        tk.Label(
+            transitions_window2,
+            text=f"[ {fita} ]",
+            font=("Arial", 10)
+        ).pack()
 
     def create_widgets(self):
 
