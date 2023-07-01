@@ -40,7 +40,7 @@ def generate_afd(num_states, limit_c, limit_a, limit_d, max_states, output_file)
 
     with open(output_file, 'w') as file:
         # Escrever os estados
-        file.write("Q: " + " ".join(states + ['INVALID']) + "\n")
+        file.write("S: " + " ".join(states + ['INVALID']) + "\n")
         # Escrever o estado inicial
         file.write("I: " + initial_state + "\n")
 
