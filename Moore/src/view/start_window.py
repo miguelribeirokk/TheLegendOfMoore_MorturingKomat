@@ -22,11 +22,11 @@ class StartWindow:
     def create_widgets(self):
         tk.Label(self.root, text="DUELO MEDIEVAL", font=("GodOfWar", 20, "bold")).pack(pady=10)
 
-        tk.Label(self.root, text="Nome do duelista 2:", font=("Arial", 12)).pack()
+        tk.Label(self.root, text="Nome do duelista 1:", font=("Arial", 12)).pack()
         self.duelist1_name_entry = tk.Entry(self.root, font=("Arial", 14))
         self.duelist1_name_entry.pack()
 
-        tk.Label(self.root, text="Nome do duelista 1:", font=("Arial", 12)).pack()
+        tk.Label(self.root, text="Nome do duelista 2:", font=("Arial", 12)).pack()
         self.duelist2_name_entry = tk.Entry(self.root, font=("Arial", 14))
         self.duelist2_name_entry.pack()
 
