@@ -12,6 +12,10 @@ DUELIST2_CURA = 7
 DUELIST1_MORTO = 8
 DUELIST2_MORTO = 9
 
+productions = {'A': 'Ataque',
+               'D': 'Defesa',
+               'C': 'Cura'
+               }
 
 class GameWindow:
     def __init__(self, root, duelist1, duelist2):
@@ -53,13 +57,13 @@ class GameWindow:
         for current_state, transitions in self.duelist1.transitions.items():
             tk.Label(transitions_window,
                      text=f"Estado: {current_state} "
-                          f" → Produção: {self.duelist1.productions[current_state].value}",
+                          f" → Produção: {productions[self.duelist1.transitions[current_state]['0'][1]]}",
                      font=("Arial", 12, "bold")).pack()
 
-            for input_, next_state in transitions.items():
+            for read, next_state in transitions.items():
                 tk.Label(
                     transitions_window,
-                    text=f"{input_} → {next_state}",
+                    text=f"{read} → {next_state}",
                     font=("Arial", 10)
                 ).pack()
 
@@ -69,13 +73,13 @@ class GameWindow:
         for current_state, transitions in self.duelist2.transitions.items():
             tk.Label(transitions_window2,
                      text=f"Estado: {current_state} "
-                          f" → Produção: {self.duelist2.productions[current_state].value}",
+                          f" → Produção: {productions[self.duelist2.transitions[current_state]['0'][1]]}",
                      font=("Arial", 12, "bold")).pack()
 
-            for input_, next_state in transitions.items():
+            for read, next_state in transitions.items():
                 tk.Label(
                     transitions_window2,
-                    text=f"{input_} → {next_state}",
+                    text=f"{read} → {next_state}",
                     font=("Arial", 10)
                 ).pack()
 
@@ -189,40 +193,40 @@ class GameWindow:
         nome2 = ""
         valor2 = ""
         for a in self.duelist1.actions.values():
-            nome1 = str(a[1].name)
+            nome1 = productions[a[1]]
             valor1 = str(a[0])
         for a in self.duelist2.actions.values():
-            nome2 = str(a[1].name)
+            nome2 = productions[a[1]]
             valor2 = str(a[0])
         if self.current_player == self.duelist2:
             self.duelist1_actions_label.config(
-                text=f"Alcançou um estado de: {str(nome1) + ' ' + str(valor1)}"
+                text=f"Alcançou um estado de: {nome1 + ' ' + valor1}"
                      f" no duelista {self.duelist1.name}")
             self.duelist2_actions_label.config(
-                text=f"Alcançou um estado de: {str(nome2) + ' ' + str(valor2)}"
+                text=f"Alcançou um estado de: {nome2 + ' ' + valor2}"
                      f" no duelista {self.duelist2.name}")
         else:
             self.duelist2_actions_label.config(
-                text=f"Alcançou um estado de: {', '.join(str(a[1].name) + ' ' + str(a[0]) for a in self.duelist1.actions.values())}"
+                text=f"Alcançou um estado de: {', '.join(a[1] + ' ' + str(a[0]) for a in self.duelist1.actions.values())}"
                      f" no duelista {self.duelist1.name}")
             self.duelist1_actions_label.config(
-                text=f"Alcançou um estado de: {', '.join(str(a[1].name) + ' ' + str(a[0]) for a in self.duelist2.actions.values())}"
+                text=f"Alcançou um estado de: {', '.join(a[1] + ' ' + str(a[0]) for a in self.duelist2.actions.values())}"
                      f" no duelista {self.duelist2.name}")
         try:
-            if nome1 == "CURA":
+            if nome1 == "Cura":
                 self.duelist1_img.config(image=self.duelist1_img_cura)
-            elif nome1 == "ATAQUE":
+            elif nome1 == "Ataque":
                 self.duelist1_img.config(image=self.duelist1_img_atk)
-            elif nome1 == "DEFESA":
+            elif nome1 == "Defesa":
                 self.duelist1_img.config(image=self.duelist1_img_def)
             else:
                 self.duelist1_img.config(image=self.duelist1_img_nrm)
 
-            if nome2 == "CURA":
+            if nome2 == "Cura":
                 self.duelist2_img.config(image=self.duelist2_img_cura)
-            elif nome2 == "ATAQUE":
+            elif nome2 == "Ataque":
                 self.duelist2_img.config(image=self.duelist2_img_atk)
-            elif nome2 == "DEFESA":
+            elif nome2 == "Defesa":
                 self.duelist2_img.config(image=self.duelist2_img_def)
             else:
                 self.duelist2_img.config(image=self.duelist2_img_nrm)

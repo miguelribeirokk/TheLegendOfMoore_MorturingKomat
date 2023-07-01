@@ -9,19 +9,17 @@ def generate_turing_machine(num_states, output_file):
     transitions = []
     not_reached_states = states.copy()
 
-
     for state in states:
+        write_symbol = random.choice(['A', 'D', 'C'])
         for read_symbol in ['0', '1', '2']:
             # Dê prioridade para não alcançados
             if len(not_reached_states) > 0:
                 next_state = random.choice(not_reached_states)
                 not_reached_states.remove(next_state)
-                write_symbol = random.choice(['A', 'D', 'C'])
                 transitions.append((state, read_symbol, write_symbol, direction, next_state))
             # Caso todos os estados já tenham sido alcançados, escolha um aleatório
             else:
                 next_state = random.choice(states)
-                write_symbol = random.choice(['A', 'D', 'C'])
                 transitions.append((state, read_symbol, write_symbol, direction, next_state))
 
     with open(output_file, 'w') as file:
