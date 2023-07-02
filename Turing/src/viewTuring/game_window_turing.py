@@ -233,14 +233,14 @@ class GameWindow:
                 text=f"Escreveu e efetuou: {nome1 + ' ' + valor1}"
                      f" no duelista {self.duelist1.name}")
             self.duelist2_actions_label.config(
-                text=f"Escreveu e efeuou: {nome2 + ' ' + valor2}"
+                text=f"Escreveu e efetuou: {nome2 + ' ' + valor2}"
                      f" no duelista {self.duelist2.name}")
         else:
             self.duelist2_actions_label.config(
-                text=f"Escreveu e efeuou: {', '.join(nome2 + ' ' + str(a[0]) for a in self.duelist1.actions.values())}"
+                text=f"Escreveu e efetuou: {', '.join(nome2 + ' ' + str(a[0]) for a in self.duelist1.actions.values())}"
                      f" no duelista {self.duelist1.name}")
             self.duelist1_actions_label.config(
-                text=f"Escreveu e efeuou: {', '.join(nome1 + ' ' + str(a[0]) for a in self.duelist2.actions.values())}"
+                text=f"Escreveu e efetuou: {', '.join(nome1 + ' ' + str(a[0]) for a in self.duelist2.actions.values())}"
                      f" no duelista {self.duelist2.name}")
         try:
             if nome1 == "Cura":
