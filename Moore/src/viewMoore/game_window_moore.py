@@ -143,6 +143,8 @@ class GameWindow:
         )
         self.play_button.pack(pady=10)
 
+        self.root.bind("<Return>", lambda event: self.check_choice())
+
         self.result_label = tk.Label(self.root, text="", font=("Arial", 14, "bold"))
         self.result_label.pack(pady=20)
 

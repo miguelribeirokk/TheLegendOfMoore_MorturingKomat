@@ -175,10 +175,12 @@ class GameWindow:
         )
         self.play_button.pack(pady=10)
 
+        self.root.bind("<Return>", lambda event: self.check_choice())
+
         self.result_label = tk.Label(self.root, text="", font=("Arial", 14, "bold"))
         self.result_label.pack(pady=20)
 
-        # ver produções a cada turno
+
 
         duelist_actions_frame = tk.Frame(self.root, bd=2, relief=tk.RAISED)
         tk.Label(duelist_actions_frame, text=f"Escritas na fita: ", font=("GodOfWar", 12, "bold")).pack()
