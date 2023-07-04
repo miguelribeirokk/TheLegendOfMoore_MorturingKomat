@@ -4,6 +4,6 @@ from viewTuring.start_window_turing import StartWindow
 
 if __name__ == "__main__":
     root = tk.Tk()
-    root.title("Duelo Medieval")
+    root.title("Duelo Turing")
     start_window = StartWindow(root)
     root.mainloop()

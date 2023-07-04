@@ -1,5 +1,6 @@
 import tkinter as tk
 from PIL import ImageTk, Image
+import pygame
 
 DUELIST1 = 0
 DUELIST2 = 1
@@ -46,6 +47,16 @@ class GameWindow:
         self.duelist1_frame = None
         self.duelist2_frame = None
 
+        pygame.mixer.init()
+       # pygame.mixer.music.load("lwoods.mp3")
+        pygame.mixer.music.play(-1)  # -1 para reproduzir em loop infinito
+
+        self.root.protocol("WM_DELETE_WINDOW", self.stop_audio)
+
+    def stop_audio(self):
+        pygame.mixer.music.stop()
+        self.root.destroy()
+
     def show_machines(self):
         transitions_window = tk.Toplevel()
         transitions_window.title(f"{self.duelist1.name}")
@@ -81,7 +92,7 @@ class GameWindow:
 
     def create_widgets(self):
 
-        tk.Label(self.root, text="DUELO MEDIEVAL MOORE", font=("GodOfWar", 20, "bold")).pack(pady=10)
+        tk.Label(self.root, text="THE LEGEND OF MOORE", font=("GodOfWar", 20, "bold"), fg="green").pack(pady=10)
 
         self.current_player_label = tk.Label(self.root, text=f"Turno de {self.current_player.name}",
                                              font=("GodOfWar", 14, "bold"), fg="purple")

@@ -20,8 +20,7 @@ class StartWindow:
         self.create_widgets()
 
     def create_widgets(self):
-        tk.Label(self.root, text="DUELO MEDIEVAL", font=("GodOfWar", 20, "bold")).pack(pady=10)
-        tk.Label(self.root, text="MÁQUINA DE MOORE", font=("GodOfWar", 20, "bold"), fg="purple").pack(pady=10)
+        tk.Label(self.root, text="THE LEGEND OF MOORE", font=("GodOfWar", 20, "bold"), fg="green").pack(pady=10)
         tk.Label(self.root, text="Nome do duelista 1:", font=("Arial", 12)).pack()
         self.duelist1_name_entry = tk.Entry(self.root, font=("Arial", 14))
         self.duelist1_name_entry.pack()
@@ -70,7 +69,7 @@ class StartWindow:
         self.root.destroy()
 
         duel_root = tk.Tk()
-        duel_root.title("Duelo Medieval Moore")
+        duel_root.title("Duelo Moore")
 
         generate_moore_machine(duelist1_states_quantity, duelist1_machine_file)
         generate_moore_machine(duelist2_states_quantity, duelist2_machine_file)

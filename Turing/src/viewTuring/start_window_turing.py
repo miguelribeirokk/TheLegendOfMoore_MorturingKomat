@@ -70,7 +70,7 @@ class StartWindow:
         self.root.destroy()
 
         duel_root = tk.Tk()
-        duel_root.title("Duelo Medieval")
+        duel_root.title("Duelo Turing")
 
         generate_turing_machine(duelist1_states_quantity, duelist1_machine_file)
         generate_turing_machine(duelist2_states_quantity, duelist2_machine_file)
