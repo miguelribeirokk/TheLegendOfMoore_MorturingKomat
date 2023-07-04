@@ -10,8 +10,8 @@ def generate_turing_machine(num_states, output_file):
     not_reached_states = states.copy()
 
     for state in states:
-        write_symbol = random.choice(['A', 'D', 'C'])
         for read_symbol in ['0', '1', '2']:
+            write_symbol = random.choice(['A', 'D', 'C'])
             # Dê prioridade para não alcançados
             if len(not_reached_states) > 0:
                 next_state = random.choice(not_reached_states)

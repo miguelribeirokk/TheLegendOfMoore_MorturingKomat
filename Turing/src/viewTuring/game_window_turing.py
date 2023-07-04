@@ -1,5 +1,7 @@
 import tkinter as tk
 from PIL import ImageTk, Image
+import pygame
+
 
 DUELIST1 = 0
 DUELIST2 = 1
@@ -36,20 +38,30 @@ class GameWindow:
         self.duelist2 = duelist2
         self.turn = 1
         self.current_player = self.duelist1 if self.turn % 2 != 0 else self.duelist2  # Definir jogador atual
-        self.duelist1_img_nrm = ImageTk.PhotoImage(Image.open("imgs/duelist1.png"))
-        self.duelist2_img_nrm = ImageTk.PhotoImage(Image.open("imgs/duelist2.png"))
-        self.duelist1_img_atk = ImageTk.PhotoImage(Image.open("imgs/duelist1_ataque.png"))
-        self.duelist2_img_atk = ImageTk.PhotoImage(Image.open("imgs/duelist2_ataque.png"))
-        self.duelist1_img_def = ImageTk.PhotoImage(Image.open("imgs/duelist1_defesa.png"))
-        self.duelist2_img_def = ImageTk.PhotoImage(Image.open("imgs/duelist2_defesa.png"))
-        self.duelist1_img_cura = ImageTk.PhotoImage(Image.open("imgs/duelist1_cura.png"))
-        self.duelist2_img_cura = ImageTk.PhotoImage(Image.open("imgs/duelist2_cura.png"))
-        self.duelist1_img_morto = ImageTk.PhotoImage(Image.open("imgs/duelist1_morto.png"))
-        self.duelist2_img_morto = ImageTk.PhotoImage(Image.open("imgs/duelist2_morto.png"))
+        self.duelist1_img_nrm = ImageTk.PhotoImage(Image.open("imgs/scorpion.png"))
+        self.duelist2_img_nrm = ImageTk.PhotoImage(Image.open("imgs/subzero.png"))
+        self.duelist1_img_atk = ImageTk.PhotoImage(Image.open("imgs/scorpionatk.png"))
+        self.duelist2_img_atk = ImageTk.PhotoImage(Image.open("imgs/subzeroatk.png"))
+        self.duelist1_img_def = ImageTk.PhotoImage(Image.open("imgs/scorpiondef.png"))
+        self.duelist2_img_def = ImageTk.PhotoImage(Image.open("imgs/subzerodef.png"))
+        self.duelist1_img_cura = ImageTk.PhotoImage(Image.open("imgs/scorpionheal.png"))
+        self.duelist2_img_cura = ImageTk.PhotoImage(Image.open("imgs/subzeroheal.png"))
+        self.duelist1_img_morto = ImageTk.PhotoImage(Image.open("imgs/scorpiondead.png"))
+        self.duelist2_img_morto = ImageTk.PhotoImage(Image.open("imgs/subzerodead.png"))
         self.create_widgets()
         self.update_stats()
         self.duelist1_frame = None
         self.duelist2_frame = None
+
+        pygame.mixer.init()
+        pygame.mixer.music.load("mk.mp3")
+        pygame.mixer.music.play(-1)  # -1 para reproduzir em loop infinito
+
+        self.root.protocol("WM_DELETE_WINDOW", self.stop_audio)
+
+    def stop_audio(self):
+        pygame.mixer.music.stop()
+        self.root.destroy()
 
     def show_machines(self):
         def create_tape_label(window, tape):
@@ -113,10 +125,10 @@ class GameWindow:
 
     def create_widgets(self):
 
-        tk.Label(self.root, text="DUELO MEDIEVAL TURING", font=("GodOfWar", 20, "bold")).pack(pady=10)
+        tk.Label(self.root, text="MORTAL TURING KOMBAT", font=("GodOfWar", 20, "bold"), fg="red").pack(pady=10)
 
         self.current_player_label = tk.Label(self.root, text=f"Turno de {self.current_player.name}",
-                                             font=("GodOfWar", 14, "bold"), fg="purple")
+                                             font=("GodOfWar", 14, "bold"), fg="red")
         self.current_player_label.pack(pady=5)
 
         self.reading_label = tk.Label(self.root, text=f"Qual leitura você deseja fazer? ",
@@ -292,11 +304,11 @@ class GameWindow:
             self.duelist2_img.config(image=self.duelist2_img_morto)
             self.play_button.config(state=tk.DISABLED)
         elif self.duelist2.life_points <= 0:
-            self.result_label.config(text=f"{self.duelist2.name} foi derrotado!", fg="red")
+            self.result_label.config(text=f"{self.duelist2.name} WINS! FATALITY!", fg="red")
             self.duelist2_img.config(image=self.duelist2_img_morto)
             self.play_button.config(state=tk.DISABLED)
         elif self.duelist1.life_points <= 0:
-            self.result_label.config(text=f"{self.duelist1.name} foi derrotado!", fg="red")
+            self.result_label.config(text=f"{self.duelist2.name} WINS! FATALITY", fg="red")
             self.duelist1_img.config(image=self.duelist1_img_morto)
             self.play_button.config(state=tk.DISABLED)
 
