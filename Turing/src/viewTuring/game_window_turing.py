@@ -125,7 +125,7 @@ class GameWindow:
 
     def create_widgets(self):
 
-        tk.Label(self.root, text="MORTAL TURING KOMBAT", font=("GodOfWar", 20, "bold"), fg="red").pack(pady=10)
+        tk.Label(self.root, text="MORTURING KOMBAT", font=("GodOfWar", 20, "bold"), fg="red").pack(pady=10)
 
         self.current_player_label = tk.Label(self.root, text=f"Turno de {self.current_player.name}",
                                              font=("GodOfWar", 14, "bold"), fg="red")

@@ -20,7 +20,7 @@ class StartWindow:
         self.create_widgets()
 
     def create_widgets(self):
-        tk.Label(self.root, text="MORTAL TURING KOMBAT", font=("GodOfWar", 20, "bold"), fg="red").pack(pady=10)
+        tk.Label(self.root, text="MORTURING KOMBAT", font=("GodOfWar", 20, "bold"), fg="red").pack(pady=10)
 
         tk.Label(self.root, text="Nome do duelista 1:", font=("Arial", 12)).pack()
         self.duelist1_name_entry = tk.Entry(self.root, font=("Arial", 14))

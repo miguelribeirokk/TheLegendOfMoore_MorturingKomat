@@ -48,7 +48,7 @@ class GameWindow:
         self.duelist2_frame = None
 
         pygame.mixer.init()
-       # pygame.mixer.music.load("lwoods.mp3")
+        pygame.mixer.music.load("lwoods.mp3")
         pygame.mixer.music.play(-1)  # -1 para reproduzir em loop infinito
 
         self.root.protocol("WM_DELETE_WINDOW", self.stop_audio)
