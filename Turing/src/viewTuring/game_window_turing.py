@@ -324,7 +324,7 @@ class GameWindow:
             sound2.play()
 
         elif self.duelist1.life_points <= 0:
-            self.result_label.config(text=f"{self.duelist2.name} WINS! FATALITY\n\n", fg="blue")
+            self.result_label.config(text=f"{self.duelist2.name} WINS! FATALITY", fg="blue")
             self.result_label.pack()
             self.duelist1_img.config(image=self.duelist1_img_morto)
             self.play_button.config(state=tk.DISABLED)
