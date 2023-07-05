@@ -271,11 +271,11 @@ class GameWindow:
             self.duelist2_img.config(image=self.duelist2_img_morto)
             self.play_button.config(state=tk.DISABLED)
         elif self.duelist2.life_points <= 0:
-            self.result_label.config(text=f"{self.duelist2.name} foi derrotado!", fg="red")
+            self.result_label.config(text=f"{self.duelist1.name} venceu!", fg="green")
             self.duelist2_img.config(image=self.duelist2_img_morto)
             self.play_button.config(state=tk.DISABLED)
         elif self.duelist1.life_points <= 0:
-            self.result_label.config(text=f"{self.duelist1.name} foi derrotado!", fg="red")
+            self.result_label.config(text=f"{self.duelist2.name} venceu!", fg="green")
             self.duelist1_img.config(image=self.duelist1_img_morto)
             self.play_button.config(state=tk.DISABLED)
 
