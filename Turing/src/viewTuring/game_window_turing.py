@@ -1,4 +1,5 @@
 import tkinter as tk
+from tkinter import Label
 from PIL import ImageTk, Image
 import pygame
 
@@ -125,6 +126,11 @@ class GameWindow:
 
     def create_widgets(self):
 
+        # Carregar a imagem de fundo
+        self.background_img = ImageTk.PhotoImage(Image.open("imgs/background.png"))
+        self.background_label = Label(self.root, image=self.background_img)
+        self.background_label.place(x=0, y=0, relwidth=1, relheight=1)
+
         tk.Label(self.root, text="MORTURING KOMBAT", font=("GodOfWar", 20, "bold"), fg="red").pack(pady=10)
 
         self.current_player_label = tk.Label(self.root, text=f"Turno de {self.current_player.name}",
@@ -189,10 +195,9 @@ class GameWindow:
 
         self.root.bind("<Return>", lambda event: self.check_choice())
 
-        self.result_label = tk.Label(self.root, text="", font=("Arial", 14, "bold"))
-        self.result_label.pack(pady=20)
 
-
+        # o self result label não pode mostart=r nada na tela inicialmente
+        self.result_label = tk.Label(self.root,  font=("Arial",12, "bold"))
 
         duelist_actions_frame = tk.Frame(self.root, bd=2, relief=tk.RAISED)
         tk.Label(duelist_actions_frame, text=f"Escritas na fita: ", font=("GodOfWar", 12, "bold")).pack()
@@ -303,14 +308,35 @@ class GameWindow:
             self.duelist1_img.config(image=self.duelist1_img_morto)
             self.duelist2_img.config(image=self.duelist2_img_morto)
             self.play_button.config(state=tk.DISABLED)
+            pygame.mixer.music.stop()
+            self.root.bind('<Return>', lambda e: None)
         elif self.duelist2.life_points <= 0:
             self.result_label.config(text=f"{self.duelist1.name} WINS! FATALITY!", fg="blue")
+            self.result_label.pack()
             self.duelist2_img.config(image=self.duelist2_img_morto)
             self.play_button.config(state=tk.DISABLED)
+            pygame.mixer.music.stop()
+            self.root.bind('<Return>', lambda e: None)
+            sound1 = pygame.mixer.Sound('scorpionwins.mp3')
+            sound2 = pygame.mixer.Sound('fatality.mp3')
+            sound1.play()
+            pygame.time.wait(int(sound1.get_length() * 1000))
+            sound2.play()
+
         elif self.duelist1.life_points <= 0:
-            self.result_label.config(text=f"{self.duelist2.name} WINS! FATALITY", fg="blue")
+            self.result_label.config(text=f"{self.duelist2.name} WINS! FATALITY\n\n", fg="blue")
+            self.result_label.pack()
             self.duelist1_img.config(image=self.duelist1_img_morto)
             self.play_button.config(state=tk.DISABLED)
+            pygame.mixer.music.stop()
+            self.root.bind('<Return>', lambda e: None)
+            sound1 = pygame.mixer.Sound('subzerowins.mp3')
+            sound2 = pygame.mixer.Sound('fatality.mp3')
+            sound1.play()
+            pygame.time.wait(int(sound1.get_length() * 1000))
+            sound2.play()
+
+
 
         self.turn += 1
         self.current_player = self.duelist1 if self.turn % 2 != 0 else self.duelist2  # Atualizar jogador atual

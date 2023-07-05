@@ -1,4 +1,5 @@
 import tkinter as tk
+from tkinter import Label
 from PIL import ImageTk, Image
 import pygame
 
@@ -53,6 +54,11 @@ class GameWindow:
 
         self.root.protocol("WM_DELETE_WINDOW", self.stop_audio)
 
+
+
+
+
+
     def stop_audio(self):
         pygame.mixer.music.stop()
         self.root.destroy()
@@ -91,6 +97,7 @@ class GameWindow:
                 ).pack()
 
     def create_widgets(self):
+
 
         tk.Label(self.root, text="THE LEGEND OF MOORE", font=("GodOfWar", 20, "bold"), fg="green").pack(pady=10)
 

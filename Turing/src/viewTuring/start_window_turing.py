@@ -14,21 +14,16 @@ duelist2_machine_file = '../files/turing2.txt'
 class StartWindow:
     def __init__(self, root):
         self.life_entry = None
-        self.duelist1_name_entry = None
-        self.duelist2_name_entry = None
+        self.duelist1_name_entry = "Scorpion"
+        self.duelist2_name_entry = "Sub-Zero"
         self.root = root
         self.create_widgets()
 
     def create_widgets(self):
+
+
         tk.Label(self.root, text="MORTURING KOMBAT", font=("GodOfWar", 20, "bold"), fg="red").pack(pady=10)
 
-        tk.Label(self.root, text="Nome do duelista 1:", font=("Arial", 12)).pack()
-        self.duelist1_name_entry = tk.Entry(self.root, font=("Arial", 14))
-        self.duelist1_name_entry.pack()
-
-        tk.Label(self.root, text="Nome do duelista 2:", font=("Arial", 12)).pack()
-        self.duelist2_name_entry = tk.Entry(self.root, font=("Arial", 14))
-        self.duelist2_name_entry.pack()
 
         tk.Label(self.root, text="Vida:", font=("Arial", 12)).pack()
         self.life_entry = tk.Entry(self.root, font=("Arial", 14))
@@ -63,8 +58,7 @@ class StartWindow:
         popup.mainloop()
 
     def start_duel(self):
-        duelist1_name = self.duelist1_name_entry.get()
-        duelist2_name = self.duelist2_name_entry.get()
+
         life_points = int(self.life_entry.get())
 
         self.root.destroy()
@@ -75,8 +69,8 @@ class StartWindow:
         generate_turing_machine(duelist1_states_quantity, duelist1_machine_file)
         generate_turing_machine(duelist2_states_quantity, duelist2_machine_file)
 
-        duelist1 = Duelist(duelist1_name, duelist1_machine_file, life_points)
-        duelist2 = Duelist(duelist2_name, duelist2_machine_file, life_points)
+        duelist1 = Duelist(self.duelist1_name_entry, duelist1_machine_file, life_points)
+        duelist2 = Duelist(self.duelist2_name_entry, duelist2_machine_file, life_points)
 
         GameWindow(duel_root, duelist1, duelist2)
         duel_root.mainloop()
