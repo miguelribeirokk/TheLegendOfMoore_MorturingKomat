@@ -1,5 +1,5 @@
 ## The Legend of Moore & Morturing Komat
-Este projeto é uma aplicação desenvolvida para a disciplina de Fundamentos da Tecnologia da Computação. Consiste em uma simulação básica em 2D de uma batalha em RPG, utilizando conceitos de máquinas de Turing e máquinas de Moore.
+Este projeto é uma aplicação desenvolvida para a disciplina de Fundamentos da Teoria da Computação. Consiste em uma simulação básica em 2D de uma batalha em RPG, utilizando conceitos de máquinas de Turing e máquinas de Moore.
 
 ### Descrição do Projeto
 O projeto é dividido em dois jogos principais:
